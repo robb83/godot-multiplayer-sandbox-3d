@@ -55,11 +55,23 @@ func _ready():
 		ray_cast_forward.visible = true
 		ray_cast_forward.enabled = true
 	
-	set_process(player_peer_id == multiplayer.get_unique_id() or is_multiplayer_authority())
-	set_physics_process(player_peer_id == multiplayer.get_unique_id() or is_multiplayer_authority())
+	# needed for server to check space above head
+	if is_multiplayer_authority():
+		ray_cast_up.visible = true
+		ray_cast_up.enabled = true
 
 func _physics_process(delta):
+	var owners = player_peer_id == multiplayer.get_unique_id() or is_multiplayer_authority()
 	
+	if owners:
+		_process_authority(delta)
+	else:
+		_process_clients(delta)
+
+func _process_clients(_delta):
+	_change_collision()
+	
+func _process_authority(delta):
 	if crouching and not player_input.crouching:
 		crouching = ray_cast_up.get_collider() != null
 	else:
