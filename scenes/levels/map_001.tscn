@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://doue3vt7x21up"]
+
+[ext_resource type="Texture2D" uid="uid://cbjv5wt05rhdq" path="res://assets/kenney_prototype_textures/Vector/texture_10.svg" id="1_gh5bl"]
+[ext_resource type="Script" uid="uid://cm7jddtkmc75k" path="res://scenes/levels/map_001.gd" id="1_p83bx"]
+[ext_resource type="PackedScene" uid="uid://beks86tbptkwp" path="res://objects/platform_translate.tscn" id="3_j0e1r"]
+[ext_resource type="PackedScene" uid="uid://mlbyns8u75d8" path="res://objects/platform_rotate.tscn" id="5_5yqef"]
+[ext_resource type="PackedScene" uid="uid://c0vkbc3tby3wp" path="res://objects/pickable_01.tscn" id="5_euqmx"]
+[ext_resource type="PackedScene" uid="uid://cj74uk6yjvcay" path="res://objects/static_garage.tscn" id="5_u1jbu"]
+[ext_resource type="PackedScene" uid="uid://b084jjum1hopk" path="res://objects/pickable_02.tscn" id="6_euqmx"]
+[ext_resource type="PackedScene" uid="uid://cod7e0gfcx0k5" path="res://objects/platform_tunnel.tscn" id="6_kkhy5"]
+[ext_resource type="PackedScene" uid="uid://c5pkq7p3gmxsq" path="res://objects/vehicle_car.tscn" id="9_rjccc"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rjccc"]
+properties/0/path = NodePath(".:time_of_day")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p83bx"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_uftd1"]
+sky_material = SubResource("ProceduralSkyMaterial_p83bx")
+
+[sub_resource type="Environment" id="Environment_m58ms"]
+background_mode = 2
+sky = SubResource("Sky_uftd1")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p83bx"]
+size = Vector3(200, 0.1, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uftd1"]
+size = Vector3(200, 0.1, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58ms"]
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("1_gh5bl")
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 5
+
+[node name="Map001" type="Node3D" unique_id=114530484]
+script = ExtResource("1_p83bx")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=57441008]
+replication_config = SubResource("SceneReplicationConfig_rjccc")
+
+[node name="MultiplayerSpawner1" type="MultiplayerSpawner" parent="." unique_id=1414745027]
+_spawnable_scenes = PackedStringArray("uid://bl4id4u5go852")
+spawn_path = NodePath("../Players")
+
+[node name="MultiplayerSpawner2" type="MultiplayerSpawner" parent="." unique_id=719119265]
+_spawnable_scenes = PackedStringArray("uid://c0vkbc3tby3wp", "uid://b084jjum1hopk", "uid://c5pkq7p3gmxsq")
+spawn_path = NodePath("../DynamicObjects")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=249213399]
+environment = SubResource("Environment_m58ms")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=895284413]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="StaticObjects" type="Node3D" parent="." unique_id=1871595820]
+
+[node name="Floor" type="StaticBody3D" parent="StaticObjects" unique_id=98687026]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticObjects/Floor" unique_id=585354869]
+shape = SubResource("BoxShape3D_p83bx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObjects/Floor" unique_id=168930226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.031206608, 0, 0.016664505)
+mesh = SubResource("BoxMesh_uftd1")
+surface_material_override/0 = SubResource("StandardMaterial3D_m58ms")
+
+[node name="PlatformTranslate" parent="StaticObjects" unique_id=1997063188 instance=ExtResource("3_j0e1r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18292117, 16.298414)
+
+[node name="PlatformRotate" parent="StaticObjects" unique_id=1835857017 instance=ExtResource("5_5yqef")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.17386, 0, 0)
+
+[node name="Garage" parent="StaticObjects" unique_id=1434474583 instance=ExtResource("5_u1jbu")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 24.068726, 0, 0)
+
+[node name="PlatformTunnel" parent="StaticObjects" unique_id=469594147 instance=ExtResource("6_kkhy5")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17, 0, 7)
+
+[node name="DynamicObjects" type="Node3D" parent="." unique_id=749812872]
+
+[node name="Pickable01" parent="DynamicObjects" unique_id=561540773 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -8)
+
+[node name="Pickable02" parent="DynamicObjects" unique_id=685695639 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1312523, 0.7, -8)
+
+[node name="Pickable03" parent="DynamicObjects" unique_id=1276614434 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1391945, 0.7, -8)
+
+[node name="Pickable04" parent="DynamicObjects" unique_id=306062987 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1391945, 0.7, -10)
+
+[node name="Pickable05" parent="DynamicObjects" unique_id=1170615955 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.276514, 0.7, -10)
+
+[node name="Pickable06" parent="DynamicObjects" unique_id=193398605 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.046, 0.7, -10)
+
+[node name="Pickable07" parent="DynamicObjects" unique_id=463556823 instance=ExtResource("6_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.7, -11.5)
+
+[node name="VehicleCar1" parent="DynamicObjects" unique_id=2060147052 instance=ExtResource("9_rjccc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -10)
+
+[node name="VehicleCar2" parent="DynamicObjects" unique_id=1966414900 instance=ExtResource("9_rjccc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.063, 1, -10)
+
+[node name="VehicleCar3" parent="DynamicObjects" unique_id=1366504230 instance=ExtResource("9_rjccc")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 25, 1, 0)
+
+[node name="Players" type="Node3D" parent="." unique_id=181580019]

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://dwrglm2ueok1e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iat1e"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.37413925, 0.37413928, 0.37413922, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_owo43"]
+AcceptDialog/constants/buttons_min_width = 60
+AcceptDialog/constants/buttons_separation = 30
+AcceptDialog/constants/resize_margin = 0
+AcceptDialog/styles/panel = SubResource("StyleBoxFlat_iat1e")
+
+[node name="DialogErrorMessage" type="AcceptDialog" unique_id=1894825527]
+oversampling_override = 1.0
+size = Vector2i(108, 124)
+visible = true
+theme = SubResource("Theme_owo43")

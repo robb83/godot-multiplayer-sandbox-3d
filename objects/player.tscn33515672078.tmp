@@ -1,0 +1,362 @@
+[gd_scene format=3 uid="uid://bl4id4u5go852"]
+
+[ext_resource type="Script" uid="uid://b3ght6ha4qhii" path="res://objects/player.gd" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://xu36p8xcpch7" path="res://objects/player_input.gd" id="2_uxov2"]
+[ext_resource type="Script" uid="uid://c5ev3qcgsavm2" path="res://scripts/mouse_indicator.gd" id="2_ykyjo"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_uxov2"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:player_peer_id")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("CameraPivot:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("CameraPivot/Camera3D:rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:velocity")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rtc2n"]
+properties/0/path = NodePath(".:running")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:direction")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:camera_yaw")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:camera_pitch")
+properties/3/spawn = false
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:crouching")
+properties/4/spawn = false
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:hold_distance")
+properties/5/spawn = false
+properties/5/replication_mode = 1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sh265"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4flbx"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_onrkg"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i3pqv"]
+albedo_color = Color(0.28485027, 0.28485027, 0.28485027, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uxov2"]
+radius = 0.025
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nmc1l"]
+albedo_color = Color(0.99990433, 0.23007739, 0.32789674, 1)
+
+[sub_resource type="Animation" id="Animation_ykyjo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D/Visuals/VisualBody:mesh:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CameraPivot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.6, -0.3)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D/Visuals/VisualEyeLeft:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.15, 0.65, -0.43)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CollisionShape3D/Visuals/VisualEyeRight:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.15, 0.65, -0.45)]
+}
+
+[sub_resource type="Animation" id="Animation_uxov2"]
+resource_name = "crouching"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.0, 1.5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D/Visuals/VisualBody:mesh:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.0, 1.5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CameraPivot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.6, -0.3), Vector3(0, 1.2, -0.3)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D/Visuals/VisualEyeLeft:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.15, 0.65, -0.43), Vector3(-0.15, 0.488, -0.43)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CollisionShape3D/Visuals/VisualEyeRight:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.15, 0.65, -0.45), Vector3(0.15, 0.488, -0.45)]
+}
+
+[sub_resource type="Animation" id="Animation_nmc1l"]
+resource_name = "standing"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.5, 2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D/Visuals/VisualBody:mesh:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.5, 2.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.75, 0), Vector3(0, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CameraPivot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.2, -0.3), Vector3(0, 1.6, -0.3)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D/Visuals/VisualEyeLeft:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.15, 0.488, -0.43), Vector3(-0.15, 0.65, -0.43)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CollisionShape3D/Visuals/VisualEyeRight:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.15, 0.488, -0.45), Vector3(0.15, 0.65, -0.45)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f46kd"]
+_data = {
+&"RESET": SubResource("Animation_ykyjo"),
+&"crouching": SubResource("Animation_uxov2"),
+&"standing": SubResource("Animation_nmc1l")
+}
+
+[node name="Player" type="CharacterBody3D" unique_id=2030521122]
+script = ExtResource("1_4flbx")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=202814022]
+replication_config = SubResource("SceneReplicationConfig_uxov2")
+
+[node name="PlayerInput" type="Node" parent="." unique_id=1848566266 node_paths=PackedStringArray("player")]
+script = ExtResource("2_uxov2")
+player = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerInput" unique_id=265568501]
+replication_config = SubResource("SceneReplicationConfig_rtc2n")
+
+[node name="MouseStateIndicator" type="Node2D" parent="." unique_id=127833990]
+visible = false
+script = ExtResource("2_ykyjo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2032247027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_sh265")
+
+[node name="Visuals" type="Node3D" parent="CollisionShape3D" unique_id=132437090]
+
+[node name="VisualBody" type="MeshInstance3D" parent="CollisionShape3D/Visuals" unique_id=1169994092]
+mesh = SubResource("CapsuleMesh_4flbx")
+
+[node name="VisualEyeLeft" type="MeshInstance3D" parent="CollisionShape3D/Visuals" unique_id=1495213632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.65, -0.43)
+mesh = SubResource("SphereMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_i3pqv")
+
+[node name="VisualEyeRight" type="MeshInstance3D" parent="CollisionShape3D/Visuals" unique_id=1860345834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.65, -0.45)
+mesh = SubResource("SphereMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_i3pqv")
+
+[node name="CameraPivot" type="Node3D" parent="." unique_id=1596290645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.3)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=2124307893]
+
+[node name="RayCastForward" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1565236757]
+visible = false
+target_position = Vector3(0, 0, -1.5)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RayCastInteraction" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1116504037]
+visible = false
+target_position = Vector3(0, 0, -6)
+hit_from_inside = true
+
+[node name="VisualNose" type="MeshInstance3D" parent="CameraPivot/Camera3D" unique_id=1522184907]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.258)
+mesh = SubResource("CapsuleMesh_uxov2")
+surface_material_override/0 = SubResource("StandardMaterial3D_nmc1l")
+
+[node name="RayCastDown" type="RayCast3D" parent="." unique_id=1242942832]
+visible = false
+target_position = Vector3(0, -1.5, 0)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1042086302]
+libraries/ = SubResource("AnimationLibrary_f46kd")
+speed_scale = 3.0

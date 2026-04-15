@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://c0vkbc3tby3wp"]
+
+[ext_resource type="Texture2D" uid="uid://btmmtvot8s704" path="res://assets/kenney_prototype_textures/PNG/Orange/texture_09.png" id="1_22nls"]
+[ext_resource type="Script" uid="uid://cx2ihoo7dvi70" path="res://objects/pickable_01.gd" id="1_coa6w"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_22nls"]
+properties/0/path = NodePath(".:rotation")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:linear_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:angular_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:position")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath(".:freeze")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath(".:freeze_mode")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath(".:sleeping")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath(".:linear_damp")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath(".:angular_damp")
+properties/8/spawn = true
+properties/8/replication_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_coa6w"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_a1i04"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_coa6w"]
+albedo_texture = ExtResource("1_22nls")
+uv1_triplanar = true
+texture_filter = 5
+
+[node name="Pickable01" type="RigidBody3D" unique_id=561540773 groups=["pickable"]]
+input_ray_pickable = false
+mass = 100.0
+angular_damp = 3.0
+script = ExtResource("1_coa6w")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1043789829]
+replication_config = SubResource("SceneReplicationConfig_22nls")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1480061340]
+shape = SubResource("BoxShape3D_coa6w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=906337508]
+mesh = SubResource("BoxMesh_a1i04")
+surface_material_override/0 = SubResource("StandardMaterial3D_coa6w")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=56023144]

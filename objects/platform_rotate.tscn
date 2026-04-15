@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://mlbyns8u75d8"]
+
+[ext_resource type="Script" uid="uid://c73xm1aypft6e" path="res://objects/platform_rotate.gd" id="1_2e1h5"]
+[ext_resource type="Texture2D" uid="uid://btmmtvot8s704" path="res://assets/kenney_prototype_textures/PNG/Orange/texture_09.png" id="1_yhwpx"]
+[ext_resource type="Texture2D" uid="uid://bna5n7kiq3jl4" path="res://assets/kenney_prototype_textures/PNG/Red/texture_02.png" id="2_2e1h5"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xvfoy"]
+properties/0/path = NodePath("AnimatableBody3D:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("AnimatableBody3D:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_yhwpx"]
+height = 0.1
+radius = 4.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2e1h5"]
+top_radius = 4.0
+bottom_radius = 4.0
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yhwpx"]
+albedo_texture = ExtResource("1_yhwpx")
+uv1_triplanar = true
+texture_filter = 5
+
+[sub_resource type="SphereMesh" id="SphereMesh_xvfoy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l4nmh"]
+albedo_texture = ExtResource("2_2e1h5")
+uv1_triplanar = true
+texture_filter = 5
+
+[sub_resource type="Animation" id="Animation_xvfoy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yhwpx"]
+resource_name = "platform_rotate"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.2831855, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2e1h5"]
+_data = {
+&"RESET": SubResource("Animation_xvfoy"),
+&"platform_rotate": SubResource("Animation_yhwpx")
+}
+
+[node name="PlatformRotate" type="Node3D" unique_id=1021084504]
+script = ExtResource("1_2e1h5")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1947422259]
+replication_config = SubResource("SceneReplicationConfig_xvfoy")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=448351903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D" unique_id=902894338]
+shape = SubResource("CylinderShape3D_yhwpx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D" unique_id=1970764673]
+mesh = SubResource("CylinderMesh_2e1h5")
+surface_material_override/0 = SubResource("StandardMaterial3D_yhwpx")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="AnimatableBody3D" unique_id=1212494049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+mesh = SubResource("SphereMesh_xvfoy")
+surface_material_override/0 = SubResource("StandardMaterial3D_l4nmh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1863191127]
+libraries/ = SubResource("AnimationLibrary_2e1h5")
+speed_scale = 0.2

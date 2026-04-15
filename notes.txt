@@ -1,0 +1,17 @@
+TODO: Password protected server
+TODO: IP, domain validation (more detailed error message)
+TODO: testing what happen if try to pickup same object ( just for fun )
+TODO: ladder, elevator, object push, vehicle, throw, rotate, day/night cycle
+TODO: despawn falling objects, reset player position
+TODO: pickup object where user touch it (not center point)
+TODO: eyetracking effect on player
+TODO: distance based sync throttle
+TODO: Player too much force received from RigidBody3Ds
+TODO: origin offset
+TODO: pickable_001 - continious falling if not receiving update from server
+
+Resources:
+	https://godotengine.org/article/multiplayer-changes-godot-4-0-report-4/
+	https://kenney.nl/
+	https://www.youtube.com/watch?v=Z7-yDGMpKh0
+	https://github.com/godotengine/godot-demo-projects

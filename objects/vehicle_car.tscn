@@ -1,0 +1,187 @@
+[gd_scene format=3 uid="uid://c5pkq7p3gmxsq"]
+
+[ext_resource type="Script" uid="uid://b8dejrequ5xqa" path="res://objects/vehicle_car.gd" id="1_7vf3j"]
+[ext_resource type="Material" uid="uid://6w7h161ai2l0" path="res://resources/vehicle_car_wheel.tres" id="2_3oxka"]
+[ext_resource type="Material" uid="uid://da3ial3wt8ruc" path="res://resources/vehicle_car_spoiler.tres" id="2_jossu"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jossu"]
+properties/0/path = NodePath(".:linear_velocity")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:angular_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:steering")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:engine_force")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:brake")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_xfqwl"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a4a5n"]
+albedo_color = Color(1, 0.24313726, 0.15686275, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jossu"]
+size = Vector3(0.7, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7vf3j"]
+size = Vector3(2.5, 0.3, 4)
+
+[sub_resource type="PrismMesh" id="PrismMesh_jossu"]
+size = Vector3(0.2, 0.5, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jossu"]
+size = Vector3(0.1, 0.8, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3oxka"]
+size = Vector3(2.5, 0.3, 4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7vf3j"]
+top_radius = 0.4
+bottom_radius = 0.4
+height = 0.3
+
+[node name="VehicleCar" type="VehicleBody3D" unique_id=2060147052 groups=["pickable"]]
+mass = 1200.0
+angular_damp = 5.0
+script = ExtResource("1_7vf3j")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1270138943]
+replication_config = SubResource("SceneReplicationConfig_jossu")
+
+[node name="Seats" type="Node3D" parent="." unique_id=1344830861]
+
+[node name="DriverSeat1" type="Area3D" parent="Seats" unique_id=1631844579 groups=["driveable"]]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.6, 0.2, 1.2)
+
+[node name="MeshInstance3D1" type="MeshInstance3D" parent="Seats/DriverSeat1" unique_id=557702873]
+mesh = SubResource("BoxMesh_xfqwl")
+surface_material_override/0 = SubResource("StandardMaterial3D_a4a5n")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Seats/DriverSeat1" unique_id=72871406]
+transform = Transform3D(1, 8.528495e-08, 6.8207676e-08, -8.528494e-08, 0.21979514, 0.97554606, 6.820767e-08, -0.97554606, 0.21979514, -2.3841858e-07, 0.17910253, 0.33264232)
+mesh = SubResource("BoxMesh_xfqwl")
+surface_material_override/0 = SubResource("StandardMaterial3D_a4a5n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Seats/DriverSeat1" unique_id=1598088261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.08)
+shape = SubResource("BoxShape3D_jossu")
+
+[node name="PassangerSeat1" type="Area3D" parent="Seats" unique_id=1765394035 groups=["interactable"]]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6, 0.2, 1.2)
+
+[node name="MeshInstance3D1" type="MeshInstance3D" parent="Seats/PassangerSeat1" unique_id=1975091920]
+mesh = SubResource("BoxMesh_xfqwl")
+surface_material_override/0 = SubResource("StandardMaterial3D_a4a5n")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Seats/PassangerSeat1" unique_id=2146274803]
+transform = Transform3D(1, 8.528495e-08, 6.8207676e-08, -8.528494e-08, 0.21979514, 0.97554606, 6.820767e-08, -0.97554606, 0.21979514, -2.3841858e-07, 0.17910253, 0.33264232)
+mesh = SubResource("BoxMesh_xfqwl")
+surface_material_override/0 = SubResource("StandardMaterial3D_a4a5n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Seats/PassangerSeat1" unique_id=560698804]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.08)
+shape = SubResource("BoxShape3D_jossu")
+
+[node name="Body1" type="MeshInstance3D" parent="." unique_id=187882350]
+mesh = SubResource("BoxMesh_7vf3j")
+
+[node name="Body2" type="MeshInstance3D" parent="." unique_id=1496143043]
+transform = Transform3D(1.9106855e-15, 4.371139e-08, 1, 1, -4.371139e-08, 0, 4.371139e-08, 1, -4.371139e-08, 0, 0.76221645, -2.1598525)
+mesh = SubResource("PrismMesh_jossu")
+surface_material_override/0 = ExtResource("2_jossu")
+
+[node name="Body3" type="MeshInstance3D" parent="." unique_id=1374995513]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0.6, 0.4, -2)
+mesh = SubResource("BoxMesh_jossu")
+
+[node name="Body4" type="MeshInstance3D" parent="." unique_id=982170201]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, -0.6, 0.4, -2)
+mesh = SubResource("BoxMesh_jossu")
+
+[node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=476035134]
+shape = SubResource("BoxShape3D_3oxka")
+
+[node name="Wheel_FR" type="VehicleWheel3D" parent="." unique_id=930897067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, -0.4, 1.6)
+use_as_steering = true
+wheel_radius = 0.4
+suspension_travel = 0.3
+suspension_stiffness = 20.0
+damping_compression = 2.0
+damping_relaxation = 2.0
+
+[node name="WheelMesh" type="MeshInstance3D" parent="Wheel_FR" unique_id=1974899767]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_7vf3j")
+surface_material_override/0 = ExtResource("2_3oxka")
+
+[node name="Wheel_RL" type="VehicleWheel3D" parent="." unique_id=368176311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, -0.4, -1.4)
+use_as_traction = true
+wheel_radius = 0.4
+suspension_travel = 0.3
+suspension_stiffness = 20.0
+damping_compression = 2.0
+damping_relaxation = 2.0
+
+[node name="WheelMesh" type="MeshInstance3D" parent="Wheel_RL" unique_id=869193096]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_7vf3j")
+surface_material_override/0 = ExtResource("2_3oxka")
+
+[node name="Wheel_RR" type="VehicleWheel3D" parent="." unique_id=1234832852]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, -0.4, -1.4)
+use_as_traction = true
+wheel_radius = 0.4
+suspension_travel = 0.3
+suspension_stiffness = 20.0
+damping_compression = 2.0
+damping_relaxation = 2.0
+
+[node name="WheelMesh" type="MeshInstance3D" parent="Wheel_RR" unique_id=1826255058]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_7vf3j")
+surface_material_override/0 = ExtResource("2_3oxka")
+
+[node name="Wheel_FL" type="VehicleWheel3D" parent="." unique_id=1836508783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, -0.4, 1.6)
+use_as_steering = true
+wheel_radius = 0.4
+suspension_travel = 0.3
+suspension_stiffness = 20.0
+damping_compression = 2.0
+damping_relaxation = 2.0
+
+[node name="WheelMesh" type="MeshInstance3D" parent="Wheel_FL" unique_id=675440159]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_7vf3j")
+surface_material_override/0 = ExtResource("2_3oxka")
+
+[node name="SpotLight3D1" type="SpotLight3D" parent="." unique_id=575549530]
+transform = Transform3D(1, 0, 0, 0, -0.9986295, -0.05233605, 0, 0.05233605, -0.9986295, -0.8, 0, 2.099)
+light_energy = 10.0
+light_volumetric_fog_energy = 3.0
+shadow_enabled = true
+spot_range = 30.0
+spot_angle = 25.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="." unique_id=138934451]
+transform = Transform3D(1, 0, 0, 0, -0.9986295, -0.05233605, 0, 0.05233605, -0.9986295, 0.8, 0, 2.099)
+light_energy = 10.0
+light_volumetric_fog_energy = 3.0
+shadow_enabled = true
+spot_range = 30.0
+spot_angle = 25.0

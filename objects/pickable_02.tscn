@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b084jjum1hopk"]
+
+[ext_resource type="PackedScene" uid="uid://c0vkbc3tby3wp" path="res://objects/pickable_01.tscn" id="1_tfcfw"]
+
+[node name="Pickable02" type="Node3D" unique_id=463556823]
+
+[node name="Pickable01" parent="." unique_id=111091096 instance=ExtResource("1_tfcfw")]
+
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="." unique_id=681842412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)
+node_a = NodePath("../Pickable01")
+node_b = NodePath("../Pickable02")
+angular_limit_x/upper_angle = 3.1415927
+angular_limit_x/lower_angle = -3.1415927
+angular_limit_y/upper_angle = 3.1415927
+angular_limit_y/lower_angle = -3.1415927
+angular_limit_z/upper_angle = 3.1415927
+angular_limit_z/lower_angle = -3.1415927
+
+[node name="Pickable02" parent="." unique_id=1779152609 instance=ExtResource("1_tfcfw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2)
+
+[node name="Generic6DOFJoint3D2" type="Generic6DOFJoint3D" parent="." unique_id=414101310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8)
+node_a = NodePath("../Pickable02")
+node_b = NodePath("../Pickable03")
+angular_limit_x/upper_angle = 3.1415927
+angular_limit_x/lower_angle = -3.1415927
+angular_limit_y/upper_angle = 3.1415927
+angular_limit_y/lower_angle = -3.1415927
+angular_limit_z/upper_angle = 3.1415927
+angular_limit_z/lower_angle = -3.1415927
+
+[node name="Pickable03" parent="." unique_id=592466583 instance=ExtResource("1_tfcfw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
+
+[node name="Generic6DOFJoint3D3" type="Generic6DOFJoint3D" parent="." unique_id=1392327337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+node_a = NodePath("../Pickable03")
+node_b = NodePath("../Pickable04")
+angular_limit_x/upper_angle = 3.1415927
+angular_limit_x/lower_angle = -3.1415927
+angular_limit_y/upper_angle = 3.1415927
+angular_limit_y/lower_angle = -3.1415927
+angular_limit_z/upper_angle = 3.1415927
+angular_limit_z/lower_angle = -3.1415927
+
+[node name="Pickable04" parent="." unique_id=1709693065 instance=ExtResource("1_tfcfw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.6)

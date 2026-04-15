@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dbnu0j6f1tlf4"]
+
+[ext_resource type="Script" uid="uid://nylu7dfp4rtp" path="res://scenes/ui/menu_main.gd" id="1_l6cm7"]
+
+[node name="MainMenu" type="Control" unique_id=967372395]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l6cm7")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1017748306]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=62779410]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1316418881]
+layout_mode = 2
+text = "Network Sandbox 3D Game Project"
+
+[node name="EditServerPort1" type="LineEdit" parent="CenterContainer/VBoxContainer" unique_id=1576294122]
+layout_mode = 2
+text = "31807"
+placeholder_text = "Port"
+
+[node name="ButtonCreateServer" type="Button" parent="CenterContainer/VBoxContainer" unique_id=2038000146]
+layout_mode = 2
+text = "Create Server
+"
+
+[node name="HSeparator1" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=1498201502]
+layout_mode = 2
+
+[node name="EditServerIP2" type="LineEdit" parent="CenterContainer/VBoxContainer" unique_id=2128495966]
+layout_mode = 2
+text = "127.0.0.1"
+placeholder_text = "Server IP"
+
+[node name="EditServerPort2" type="LineEdit" parent="CenterContainer/VBoxContainer" unique_id=1446795697]
+layout_mode = 2
+text = "31807"
+placeholder_text = "Port"
+
+[node name="ButtonJoin" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1078757153]
+layout_mode = 2
+text = "Join To Server"
+
+[node name="ButtonCancel" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1469375946]
+visible = false
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonCreateServer" to="." method="_on_button_create_server_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonJoin" to="." method="_on_button_join_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonCancel" to="." method="_on_button_cancel_pressed"]

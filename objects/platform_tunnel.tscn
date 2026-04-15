@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cod7e0gfcx0k5"]
+
+[ext_resource type="Texture2D" uid="uid://b70rpakcwyi1d" path="res://assets/kenney_prototype_textures/PNG/Red/texture_10.png" id="1_vi6qh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3dtc6"]
+albedo_texture = ExtResource("1_vi6qh")
+uv1_triplanar = true
+texture_filter = 5
+
+[node name="PlatformTunnel" type="Node3D" unique_id=469594147]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=93348069]
+use_collision = true
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSGCombiner3D" unique_id=1876401882]
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 1.5, 1.5, 1.5, 1.5, 0, 1.6, 0, 1.6, 1.7, -0.1, 1.7, -0.1, 0)
+depth = 10.0
+material = SubResource("StandardMaterial3D_3dtc6")

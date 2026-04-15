@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://bl4id4u5go852"]
+
+[ext_resource type="Script" uid="uid://b3ght6ha4qhii" path="res://objects/player.gd" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://xu36p8xcpch7" path="res://objects/player_input.gd" id="2_uxov2"]
+[ext_resource type="Script" uid="uid://c5ev3qcgsavm2" path="res://scripts/mouse_indicator.gd" id="2_ykyjo"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_uxov2"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:player_peer_id")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("Visuals/VisualFace/VisualEyeLeft:rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("Visuals/VisualFace/VisualEyeRight:rotation")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:crouching")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rtc2n"]
+properties/0/path = NodePath(".:running")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:direction")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:crouching")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:hold_distance")
+properties/3/spawn = false
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:orientation")
+properties/4/spawn = false
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:object_rotation")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4flbx"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nmc1l"]
+height = 1.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_onrkg"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i3pqv"]
+albedo_color = Color(0.28485027, 0.28485027, 0.28485027, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_uxov2"]
+radius = 0.03
+height = 0.06
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uxov2"]
+radius = 0.04
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nmc1l"]
+albedo_color = Color(0.9999985, 0.38254955, 0.2408176, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sh265"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uxov2"]
+height = 1.4
+
+[node name="Player" type="CharacterBody3D" unique_id=2030521122]
+script = ExtResource("1_4flbx")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=202814022]
+replication_config = SubResource("SceneReplicationConfig_uxov2")
+
+[node name="PlayerInput" type="Node" parent="." unique_id=1848566266 node_paths=PackedStringArray("player")]
+script = ExtResource("2_uxov2")
+player = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerInput" unique_id=265568501]
+replication_config = SubResource("SceneReplicationConfig_rtc2n")
+
+[node name="MouseStateIndicator" type="Node2D" parent="." unique_id=127833990]
+visible = false
+script = ExtResource("2_ykyjo")
+
+[node name="Visuals" type="Node3D" parent="." unique_id=132437090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="VisualBodyStand" type="MeshInstance3D" parent="Visuals" unique_id=1169994092]
+mesh = SubResource("CapsuleMesh_4flbx")
+
+[node name="VisualBodyCrouch" type="MeshInstance3D" parent="Visuals" unique_id=168618045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25588322, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_nmc1l")
+
+[node name="VisualFace" type="Node3D" parent="Visuals" unique_id=859299338]
+
+[node name="VisualEyeLeft" type="MeshInstance3D" parent="Visuals/VisualFace" unique_id=1495213632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.65, -0.43)
+mesh = SubResource("SphereMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_i3pqv")
+
+[node name="VisualEyeCoreLeft" type="MeshInstance3D" parent="Visuals/VisualFace/VisualEyeLeft" unique_id=1745580531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.08)
+mesh = SubResource("SphereMesh_uxov2")
+
+[node name="VisualEyeRight" type="MeshInstance3D" parent="Visuals/VisualFace" unique_id=1860345834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.65, -0.45)
+mesh = SubResource("SphereMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_i3pqv")
+
+[node name="VisualEyeCoreRight" type="MeshInstance3D" parent="Visuals/VisualFace/VisualEyeRight" unique_id=60200903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.08)
+mesh = SubResource("SphereMesh_uxov2")
+
+[node name="VisualNose" type="MeshInstance3D" parent="Visuals/VisualFace" unique_id=1522184907]
+transform = Transform3D(1, 0, 0, 0, -0.7269224, 0.6867196, 0, -0.6867196, -0.7269224, 0, 0.6, -0.5053973)
+mesh = SubResource("CapsuleMesh_uxov2")
+surface_material_override/0 = SubResource("StandardMaterial3D_nmc1l")
+
+[node name="CollisionStand" type="CollisionShape3D" parent="." unique_id=2032247027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_sh265")
+
+[node name="CollisionCrouch" type="CollisionShape3D" parent="." unique_id=747334892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_uxov2")
+disabled = true
+
+[node name="CameraPivot" type="Node3D" parent="." unique_id=1596290645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.3)
+visible = false
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=2124307893]
+
+[node name="RayCastForward" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1565236757]
+enabled = false
+target_position = Vector3(0, 0, -1.5)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RayCastInteraction" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1116504037]
+enabled = false
+target_position = Vector3(0, 0, -6)
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="RayCastDown" type="RayCast3D" parent="." unique_id=1242942832]
+visible = false
+enabled = false
+target_position = Vector3(0, -1.5, 0)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RayCastUp" type="RayCast3D" parent="." unique_id=46248000]
+visible = false
+enabled = false
+target_position = Vector3(0, 2, 0)

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cyfo1f6me51k5"]
+
+[ext_resource type="Script" uid="uid://c3qeue6jh2uvj" path="res://scenes/main.gd" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://dbnu0j6f1tlf4" path="res://scenes/ui/menu_main.tscn" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bxisdy1amst25" path="res://scenes/ui/menu_options.tscn" id="3_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://c8v1lobxmf0sx" path="res://scenes/ui/menu_statistics.tscn" id="4_jyhfs"]
+
+[node name="Main" type="Node" unique_id=1753394026]
+script = ExtResource("1_sugp2")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=496834420]
+_spawnable_scenes = PackedStringArray("uid://doue3vt7x21up")
+spawn_path = NodePath("../Levels")
+spawn_limit = 1
+
+[node name="MainMenu" parent="." unique_id=967372395 instance=ExtResource("2_jyhfs")]
+
+[node name="Options" parent="." unique_id=1566645939 instance=ExtResource("3_tbgi4")]
+visible = false
+
+[node name="MenuStatistics" parent="." unique_id=1323699873 instance=ExtResource("4_jyhfs")]
+visible = false
+
+[node name="Levels" type="Node" parent="." unique_id=45069525]
