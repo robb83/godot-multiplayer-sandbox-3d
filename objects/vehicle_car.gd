@@ -11,8 +11,8 @@ func _ready():
 func _kick():
 	Network.network_kick(multiplayer.get_remote_sender_id())
 
-func interact(player):
+func interact(_player):
 	_kick.rpc_id(1)
 
-func drive(player):
+func drive(_player):
 	_kick.rpc_id(1)

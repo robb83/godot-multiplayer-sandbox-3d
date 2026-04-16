@@ -8,13 +8,13 @@
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:player_peer_id")
+properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
-properties/1/replication_mode = 2
-properties/2/path = NodePath(".:rotation")
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:velocity")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath(".:velocity")
+properties/3/path = NodePath(".:crouching")
 properties/3/spawn = true
 properties/3/replication_mode = 1
 properties/4/path = NodePath("Visuals/VisualFace/VisualEyeLeft:rotation")
@@ -23,9 +23,6 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath("Visuals/VisualFace/VisualEyeRight:rotation")
 properties/5/spawn = true
 properties/5/replication_mode = 1
-properties/6/path = NodePath(".:crouching")
-properties/6/spawn = true
-properties/6/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rtc2n"]
 properties/0/path = NodePath(".:running")
@@ -44,7 +41,7 @@ properties/4/path = NodePath(".:orientation")
 properties/4/spawn = false
 properties/4/replication_mode = 1
 properties/5/path = NodePath(".:object_rotation")
-properties/5/spawn = true
+properties/5/spawn = false
 properties/5/replication_mode = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4flbx"]
@@ -78,7 +75,7 @@ height = 1.4
 [node name="Player" type="CharacterBody3D" unique_id=2030521122]
 script = ExtResource("1_4flbx")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=202814022]
+[node name="MultiplayerSynchronizer1" type="MultiplayerSynchronizer" parent="." unique_id=202814022]
 replication_config = SubResource("SceneReplicationConfig_uxov2")
 
 [node name="PlayerInput" type="Node" parent="." unique_id=1848566266 node_paths=PackedStringArray("player")]

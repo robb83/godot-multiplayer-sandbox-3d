@@ -45,8 +45,10 @@ func _input(event):
 		
 	if event is InputEventMouseMotion:
 		if rotating_object:
-			object_rotation.y = wrapf(object_rotation.y + -event.relative.x * mouse_sensitivity, -PI, PI)
-			object_rotation.x = wrapf(object_rotation.x + -event.relative.y * mouse_sensitivity, -PI, PI)
+			#object_rotation.y = wrapf(object_rotation.y + -event.relative.x * mouse_sensitivity, -PI, PI)
+			#object_rotation.x = wrapf(object_rotation.x + -event.relative.y * mouse_sensitivity, -PI, PI)
+			object_rotation.y = object_rotation.y + -event.relative.x * mouse_sensitivity
+			object_rotation.x = object_rotation.x + -event.relative.y * mouse_sensitivity
 		else:
 			orientation.y = wrapf(orientation.y + -event.relative.x * mouse_sensitivity, -PI, PI)
 			orientation.x = clamp(orientation.x - event.relative.y * mouse_sensitivity, pitch_min, pitch_max)
@@ -81,6 +83,7 @@ func _handle_primary_interaction():
 	var result = player.ray_cast_interaction.get_collider()
 	if result:
 		var collider = result
+		var collision_point = player.ray_cast_interaction.get_collision_point()
 		if collider.is_in_group("interactable"):
 			var object = collider.get_meta("object")
 			object.interact(self)
@@ -90,7 +93,7 @@ func _handle_primary_interaction():
 		elif collider.is_in_group("pickable"):
 			object_rotation = Vector2.ZERO
 			hold_distance = clamp(collider.global_position.distance_to(player.global_position), min_hold_distance, max_hold_distance)
-			player.request_pickup_object.rpc_id(1, collider.get_path())
+			player.request_pickup_object.rpc_id(1, collider.get_path(), collider.to_local(collision_point))
 
 func _handle_interaction_feedback():
 	var msi = player.mouse_state_indicator

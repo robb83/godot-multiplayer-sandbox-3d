@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://b084jjum1hopk" path="res://objects/pickable_02.tscn" id="6_euqmx"]
 [ext_resource type="PackedScene" uid="uid://cod7e0gfcx0k5" path="res://objects/platform_tunnel.tscn" id="6_kkhy5"]
 [ext_resource type="PackedScene" uid="uid://c5pkq7p3gmxsq" path="res://objects/vehicle_car.tscn" id="9_rjccc"]
+[ext_resource type="PackedScene" uid="uid://bm5nwxv6k38v2" path="res://objects/pickable_03.tscn" id="9_y8wi5"]
+[ext_resource type="PackedScene" uid="uid://di8boooqu3i71" path="res://objects/pickable_04.tscn" id="10_fau81"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rjccc"]
 properties/0/path = NodePath(".:time_of_day")
@@ -47,12 +49,11 @@ script = ExtResource("1_p83bx")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=57441008]
 replication_config = SubResource("SceneReplicationConfig_rjccc")
 
-[node name="MultiplayerSpawner1" type="MultiplayerSpawner" parent="." unique_id=1414745027]
-_spawnable_scenes = PackedStringArray("uid://bl4id4u5go852")
+[node name="MultiplayerSpawnerPlayers" type="MultiplayerSpawner" parent="." unique_id=1414745027]
 spawn_path = NodePath("../Players")
 
-[node name="MultiplayerSpawner2" type="MultiplayerSpawner" parent="." unique_id=719119265]
-_spawnable_scenes = PackedStringArray("uid://c0vkbc3tby3wp", "uid://b084jjum1hopk", "uid://c5pkq7p3gmxsq")
+[node name="MultiplayerSpawnerObjects" type="MultiplayerSpawner" parent="." unique_id=719119265]
+_spawnable_scenes = PackedStringArray("uid://c0vkbc3tby3wp", "uid://b084jjum1hopk", "uid://c5pkq7p3gmxsq", "uid://bm5nwxv6k38v2", "uid://di8boooqu3i71")
 spawn_path = NodePath("../DynamicObjects")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=249213399]
@@ -70,7 +71,7 @@ shadow_enabled = true
 shape = SubResource("BoxShape3D_p83bx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObjects/Floor" unique_id=168930226]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.031206608, 0, 0.016664505)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.055800915, -1.9073486e-06, 0.18320465)
 mesh = SubResource("BoxMesh_uftd1")
 surface_material_override/0 = SubResource("StandardMaterial3D_m58ms")
 
@@ -108,6 +109,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.046, 0.7, -10)
 
 [node name="Pickable07" parent="DynamicObjects" unique_id=463556823 instance=ExtResource("6_euqmx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.7, -11.5)
+
+[node name="Pickable08" parent="DynamicObjects" unique_id=80363484 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.7, -8)
+
+[node name="Pickable09" parent="DynamicObjects" unique_id=103218068 instance=ExtResource("10_fau81")]
+transform = Transform3D(1, 0, 0, 0, -0.18592383, 0.98256415, 0, -0.98256415, -0.18592383, 23.634563, 1.0974209, 3.3301563)
+
+[node name="Pickable10" parent="DynamicObjects" unique_id=757634821 instance=ExtResource("10_fau81")]
+transform = Transform3D(1, 0, 0, 0, -0.18592383, 0.98256415, 0, -0.98256415, -0.18592383, 23.634563, 1.0974209, 3.5025826)
+
+[node name="Pickable11" parent="DynamicObjects" unique_id=1204639175 instance=ExtResource("10_fau81")]
+transform = Transform3D(1, 0, 0, 0, -0.18592383, 0.98256415, 0, -0.98256415, -0.18592383, 23.634563, 1.0974209, 3.7210937)
 
 [node name="VehicleCar1" parent="DynamicObjects" unique_id=2060147052 instance=ExtResource("9_rjccc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -10)

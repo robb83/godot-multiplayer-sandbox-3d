@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://c0vkbc3tby3wp"]
+[gd_scene format=3 uid="uid://di8boooqu3i71"]
 
-[ext_resource type="Texture2D" uid="uid://ci0pmwcqsjmk1" path="res://assets/kenney_prototype_textures/PNG/Purple/texture_09.png" id="1_22nls"]
+[ext_resource type="Texture2D" uid="uid://dcx7ih4g3el4l" path="res://assets/kenney_prototype_textures/PNG/Green/texture_10.png" id="1_shnvk"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_22nls"]
 properties/0/path = NodePath(".:rotation")
@@ -16,26 +16,28 @@ properties/3/path = NodePath(".:position")
 properties/3/spawn = true
 properties/3/replication_mode = 2
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_coa6w"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_gv2kh"]
+size = Vector3(10, 0.1, 2)
 
-[sub_resource type="BoxMesh" id="BoxMesh_a1i04"]
+[sub_resource type="BoxMesh" id="BoxMesh_sowmr"]
+size = Vector3(10, 0.1, 2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_coa6w"]
-albedo_texture = ExtResource("1_22nls")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brtvg"]
+albedo_texture = ExtResource("1_shnvk")
 uv1_triplanar = true
 texture_filter = 5
 
-[node name="Pickable01" type="RigidBody3D" unique_id=561540773 groups=["pickable"]]
+[node name="Pickable04" type="RigidBody3D" unique_id=561540773 groups=["pickable"]]
 input_ray_pickable = false
-mass = 100.0
+mass = 50.0
 angular_damp = 5.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1043789829]
 replication_config = SubResource("SceneReplicationConfig_22nls")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1480061340]
-shape = SubResource("BoxShape3D_coa6w")
+shape = SubResource("BoxShape3D_gv2kh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=906337508]
-mesh = SubResource("BoxMesh_a1i04")
-surface_material_override/0 = SubResource("StandardMaterial3D_coa6w")
+mesh = SubResource("BoxMesh_sowmr")
+surface_material_override/0 = SubResource("StandardMaterial3D_brtvg")

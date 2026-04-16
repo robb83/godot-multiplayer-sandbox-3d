@@ -26,6 +26,10 @@ GameState="*uid://bc12yaejdew6t"
 AudioManager="*uid://cut4a5lqs0vad"
 UI="*uid://dlgajwmenejkb"
 
+[display]
+
+window/size/resizable=false
+
 [global_group]
 
 pickable=""

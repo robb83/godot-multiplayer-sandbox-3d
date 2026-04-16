@@ -13,8 +13,21 @@ const EPSILON = 0.0001
 @export var time_of_day := 0.3
 @export var day_speed := 0.0025
 
+func _ready():
+	$MultiplayerSpawnerPlayers.spawn_function = _handle_player_spawn
+
 func _physics_process(delta):
 	_handle_sun(delta)
+
+func _handle_player_spawn(data):
+	print("[%s] _handle_player_spawn: %s" % [multiplayer.get_unique_id(), str(data)])
+	
+	var character = player_template.instantiate()
+	character.current_map = self
+	character.player_peer_id = data[0]
+	character.position = data[1]
+	character.name = str(data[0])
+	return character
 
 func _handle_sun(delta):
 	if is_multiplayer_authority():
@@ -45,15 +58,10 @@ func get_sun_color(sun_direction: Vector3) -> Color:
 		return night_color.lerp(sunrise_color, night_t)
 		
 func add_player(id: int):
-	var pos := Vector2.from_angle(randf() * 2 * PI)
+	var dir := Vector2.from_angle(randf() * 2 * PI)
+	var pos := Vector3(dir.x * SPAWN_RANDOM * randf(), 0, dir.y * SPAWN_RANDOM * randf())
+	$MultiplayerSpawnerPlayers.spawn([id, pos])
 	
-	var character = player_template.instantiate()
-	character.current_map = self
-	character.player_peer_id = id
-	character.position = Vector3(pos.x * SPAWN_RANDOM * randf(), 0, pos.y * SPAWN_RANDOM * randf())
-	character.name = str(id)
-	players.add_child(character, true)
-
 func del_player(id: int):
 	if not players.has_node(str(id)):
 		return
