@@ -19,6 +19,12 @@ func _ready():
 func _physics_process(delta):
 	_handle_sun(delta)
 
+func _enter_tree() -> void:
+	GameState.current_world = self
+	
+func _exit_tree() -> void:
+	GameState.current_world = null
+
 func _handle_player_spawn(data):
 	print("[%s] _handle_player_spawn: %s" % [multiplayer.get_unique_id(), str(data)])
 	
@@ -67,7 +73,12 @@ func del_player(id: int):
 		return
 	players.get_node(str(id)).queue_free()
 	
+func get_player_by_peer(peer_id):
+	return players.get_node(str(peer_id)) if players.has_node(str(peer_id)) else null
+	
+@rpc("any_peer", "call_local")
 func spawn_object(pos):
-	var object = pickable_01.instantiate()
-	object.position = pos
-	dynamic_objects.add_child(object, true)
+	if is_multiplayer_authority():
+		var object = pickable_01.instantiate()
+		object.position = pos
+		dynamic_objects.add_child(object, true)

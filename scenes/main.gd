@@ -7,8 +7,6 @@ const MAP_001 = preload("res://scenes/levels/map_001.tscn")
 @onready var main_menu: Control = $MainMenu
 @onready var menu_statistics: Control = $MenuStatistics
 
-var current_map = null
-
 func _ready():
 	Network.state_changed.connect(_on_network_state_changed)
 	Network.player_connected.connect(add_player)
@@ -31,27 +29,28 @@ func _on_network_state_changed(state):
 		menu_statistics.hide()
 		main_menu.show()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		if current_map:
-			levels.remove_child(current_map)
-			current_map = null
+		if GameState.current_world:
+			#Clear GameState.current_world
+			levels.remove_child(GameState.current_world)
 	elif state == Network.NetworkState.LISTENING:
 		menu_statistics.show()
 		main_menu.hide()
-		current_map = MAP_001.instantiate()
-		levels.add_child(current_map)
-		add_player(1)
-		for id in multiplayer.get_peers():
-			current_map.add_player(id)
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		#Set GameState.current_world
+		levels.add_child(MAP_001.instantiate())
+		if GameState.current_world:
+			add_player(1)
+			for id in multiplayer.get_peers():
+				GameState.current_world.add_player(id)
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif state == Network.NetworkState.CONNECTED:
 		menu_statistics.show()
 		main_menu.hide()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func add_player(id: int):
-	if current_map:
-		current_map.add_player(id)
+	if GameState.current_world:
+		GameState.current_world.add_player(id)
 
 func del_player(id: int):
-	if current_map:
-		current_map.del_player(id)
+	if GameState.current_world:
+		GameState.current_world.del_player(id)

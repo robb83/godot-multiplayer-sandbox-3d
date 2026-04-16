@@ -70,14 +70,22 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
 		_handle_primary_interaction()
 		
-	_handle_interaction_feedback()
+	_handle_interaction_visual_feedback()
 	
 func _handle_jump():
 	jumping = true # local
 	jump.rpc_id(1) # server
 	
 func _handle_secondary_interaction():
-	player.request_interaction.rpc_id(1)
+	if player.held_object:
+		print(player.held_object)
+		if is_instance_valid(player.held_object):
+			player.held_object.drop.rpc_id(1)
+		else:
+			player.held_object = null
+	else:
+		var pos = player.camera.global_transform.origin + -player.camera.global_transform.basis.z * 5
+		player.current_map.spawn_object.rpc_id(1, pos)
 	
 func _handle_primary_interaction():
 	var result = player.ray_cast_interaction.get_collider()
@@ -91,11 +99,12 @@ func _handle_primary_interaction():
 			var object = collider.get_meta("object")
 			object.drive(self)
 		elif collider.is_in_group("pickable"):
+			var object = collider.get_meta("object")
 			object_rotation = Vector2.ZERO
 			hold_distance = clamp(collider.global_position.distance_to(player.global_position), min_hold_distance, max_hold_distance)
-			player.request_pickup_object.rpc_id(1, collider.get_path(), collider.to_local(collision_point))
+			object.pickup.rpc_id(1, object.to_local(collision_point))
 
-func _handle_interaction_feedback():
+func _handle_interaction_visual_feedback():
 	var msi = player.mouse_state_indicator
 	if msi:
 		var result = player.ray_cast_interaction.get_collider()

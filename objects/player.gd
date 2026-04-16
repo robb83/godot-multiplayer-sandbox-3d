@@ -19,13 +19,15 @@ class_name Player
 @onready var collision_crouch: CollisionShape3D = $CollisionCrouch
 @onready var collision_stand: CollisionShape3D = $CollisionStand
 
-@export var current_map = null
+@export var held_object_position : Vector3 = Vector3.ZERO
+@export var held_object_rotation : Vector2 = Vector2.ZERO
 @export var crouching : bool = false
 @export var player_peer_id := 1:
 	set(peer_id):
 		player_peer_id = peer_id
 		$PlayerInput.set_multiplayer_authority(peer_id)
-		
+
+var current_map = null
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var current_speed = 0.0
 var acceleration = 2.0
@@ -34,14 +36,11 @@ var run_speed = 10.0
 var crouch_speed = 3.0
 var jump_force = 4.0
 var max_velocity : float = 20.0
-var player_strength : float = 100
-
+var strength : float = 100
 var held_object = null
-var held_object_grab_point = null
-var held_object_max_distance : float = 12
-var held_object_rotation_progress : Vector2 = Vector2.ZERO
-var held_object_angular_force : float = 15.0
-var held_object_too_weak : float = 2.0
+
+func set_held_object(object):
+	held_object = object
 
 func _ready():
 	if player_peer_id == multiplayer.get_unique_id():
@@ -85,6 +84,10 @@ func _process_authority(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		
+	var cam_transform = camera.global_transform
+	held_object_position = cam_transform.origin + -cam_transform.basis.z * player_input.hold_distance
+	held_object_rotation = player_input.object_rotation
+		
 	camera.rotation.x = player_input.orientation.x
 	self.rotation.y = player_input.orientation.y
 	
@@ -115,84 +118,7 @@ func _process_authority(delta):
 		velocity = velocity.normalized() * max_velocity
 	
 	move_and_slide()
-	_handle_interaction()
 
-func _handle_interaction():
-	_held_object_move()
-
-@rpc("any_peer", "call_local", "reliable")
-func request_interaction():
-	#TODO: Maybe it would be a good idea to leave this to the client.
-	if player_peer_id == multiplayer.get_remote_sender_id():
-		if held_object:
-			_held_object_release()
-		else:
-			var pos = camera.global_transform.origin + -camera.global_transform.basis.z * 5
-			current_map.spawn_object(pos)
-
-@rpc("any_peer", "call_local", "reliable")
-func request_pickup_object(path, grab_point):
-	if player_peer_id == multiplayer.get_remote_sender_id():
-		if held_object:
-			_held_object_release()
-			return
-			
-		var object = get_node(path)
-		if object and object.is_in_group("pickable") and grab_point and grab_point.length() < held_object_max_distance:
-			if self.global_position.distance_to(object.global_position) < held_object_max_distance:
-				_held_object_accuire(object, grab_point)
-
-func _held_object_move():
-	if held_object:
-		if self.global_position.distance_to(held_object.global_position) >= held_object_max_distance:
-			_held_object_release()
-			return
-			
-		var cam_transform = camera.global_transform
-		#var current_pos = held_object.global_transform.origin
-		var current_pos = held_object.to_global(held_object_grab_point)
-		var target_pos = cam_transform.origin + -cam_transform.basis.z * player_input.hold_distance
-		var linear_movement = target_pos - current_pos
-		
-		if linear_movement.length() > held_object_too_weak:
-			_held_object_release()
-			return
-		
-		# linear movement
-		held_object.linear_velocity = (linear_movement * player_strength) / held_object.mass
-		
-		# angular movement or rotation
-		var diff = player_input.object_rotation - held_object_rotation_progress
-		held_object_rotation_progress = player_input.object_rotation
-		#held_object.rotate(camera.global_transform.basis.x, -wrapf(diff.x, -PI, PI))
-		#held_object.rotate(camera.global_transform.basis.y, -wrapf(diff.y, -PI, PI))
-		var target_angular_velocity = Vector3(-diff.x, -diff.y, 0.0) * held_object_angular_force
-		var delta_av = target_angular_velocity - held_object.angular_velocity
-		var torque = delta_av * player_strength
-		held_object.apply_torque(torque)
-	
-func _held_object_accuire(object, grab_point):
-	if held_object:
-		_held_object_release()
-	if object:
-		player_input.object_rotation = Vector2.ZERO
-		held_object = object
-		#held_object.freeze = true
-		#held_object.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
-		#held_object.linear_damp = 10.0
-		#held_object.angular_damp = 5.0
-		held_object_rotation_progress = Vector2.ZERO
-		held_object_grab_point = grab_point
-		held_object.add_collision_exception_with(self)
-	
-func _held_object_release():
-	if held_object:
-		#held_object.linear_damp = 0.0
-		#held_object.angular_damp = 3.0
-		#held_object.freeze = false
-		held_object.remove_collision_exception_with(self)
-		held_object = null
-	
 func _change_collision():
 	if crouching:
 		collision_stand.disabled = true

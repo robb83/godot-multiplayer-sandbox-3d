@@ -53,7 +53,7 @@ top_radius = 0.4
 bottom_radius = 0.4
 height = 0.3
 
-[node name="VehicleCar" type="VehicleBody3D" unique_id=2060147052 groups=["pickable"]]
+[node name="VehicleCar" type="VehicleBody3D" unique_id=2060147052]
 mass = 1200.0
 angular_damp = 5.0
 script = ExtResource("1_7vf3j")

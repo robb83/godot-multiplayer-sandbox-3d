@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://di8boooqu3i71"]
 
+[ext_resource type="Script" uid="uid://drtysusjsic5w" path="res://scripts/pickable.gd" id="1_gv2kh"]
 [ext_resource type="Texture2D" uid="uid://dcx7ih4g3el4l" path="res://assets/kenney_prototype_textures/PNG/Green/texture_10.png" id="1_shnvk"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_22nls"]
@@ -27,10 +28,12 @@ albedo_texture = ExtResource("1_shnvk")
 uv1_triplanar = true
 texture_filter = 5
 
-[node name="Pickable04" type="RigidBody3D" unique_id=561540773 groups=["pickable"]]
+[node name="Pickable04" type="RigidBody3D" unique_id=1163166378 groups=["pickable"]]
 input_ray_pickable = false
 mass = 50.0
 angular_damp = 5.0
+script = ExtResource("1_gv2kh")
+metadata/_custom_type_script = "uid://drtysusjsic5w"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1043789829]
 replication_config = SubResource("SceneReplicationConfig_22nls")
