@@ -97,7 +97,7 @@ func _handle_primary_interaction():
 			object.interact.rpc_id(1)
 		if collider.is_in_group("driveable"):
 			var object = collider.get_meta("object")
-			object.drive(self)
+			object.drive.rpc_id(1)
 		elif collider.is_in_group("pickable"):
 			var object = collider.get_meta("object")
 			object_rotation = Vector2.ZERO

@@ -8,11 +8,9 @@ func _ready():
 	passanger_seat_1.set_meta('object', self)
 
 @rpc("any_peer", "call_local")
-func _kick():
+func interact():
 	Network.network_kick(multiplayer.get_remote_sender_id())
 
-func interact(_player):
-	_kick.rpc_id(1)
-
+@rpc("any_peer", "call_local")
 func drive(_player):
-	_kick.rpc_id(1)
+	Network.network_kick(multiplayer.get_remote_sender_id())
