@@ -18,12 +18,7 @@ func _update_state():
 	else:
 		animation_player.current_animation = "door_close"
 
-func interact(_player):
-	if is_multiplayer_authority():
+@rpc("any_peer", "call_local")
+func interact():
+	if multiplayer.is_server():
 		_update_state()
-	else:
-		request_interact.rpc_id(get_multiplayer_authority())
-
-@rpc("any_peer", "call_local", "reliable")
-func request_interact():
-	_update_state()

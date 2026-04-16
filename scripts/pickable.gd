@@ -13,7 +13,7 @@ func _ready():
 	add_to_group("pickable", true)
 	set_meta("object", self)
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	_held_object_check()
 	_held_object_move()
 

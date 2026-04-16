@@ -94,7 +94,7 @@ func _handle_primary_interaction():
 		var collision_point = player.ray_cast_interaction.get_collision_point()
 		if collider.is_in_group("interactable"):
 			var object = collider.get_meta("object")
-			object.interact(self)
+			object.interact.rpc_id(1)
 		if collider.is_in_group("driveable"):
 			var object = collider.get_meta("object")
 			object.drive(self)
