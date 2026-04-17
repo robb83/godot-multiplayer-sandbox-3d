@@ -77,7 +77,7 @@ func _handle_secondary_interaction():
 			player.held_object = null
 	else:
 		var pos = player.camera.global_transform.origin + -player.camera.global_transform.basis.z * 5
-		player.current_map.spawn_object.rpc_id(1, pos)
+		GameState.current_world.spawn_object.rpc_id(1, pos)
 	
 func _handle_primary_interaction():
 	var result = player.ray_cast_interaction.get_collider()
