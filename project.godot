@@ -200,6 +200,7 @@ vehicle_horn={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+jolt_physics_3d/limits/world_boundary_shape_size=20000.0
 
 [rendering]
 

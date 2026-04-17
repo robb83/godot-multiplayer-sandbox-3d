@@ -17,6 +17,13 @@ var object_min_distance : float = 1.5
 var object_max_distance : float = 8.0
 var scroll_speed : float = 0.5
 var rotating_object : bool = false
+var throw_min_force : float = 20
+var throw_max_force : float = 200
+var throw_max_charge_time : float = 1.5
+
+var interaction_is_holding := false
+var interaction_hold_time := 0.0
+var interaction_hold_threshold := 0.3
 
 func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
@@ -46,9 +53,13 @@ func _input(event):
 			orientation.y = wrapf(orientation.y + -event.relative.x * mouse_sensitivity, -PI, PI)
 			orientation.x = clamp(orientation.x - event.relative.y * mouse_sensitivity, pitch_min, pitch_max)
 
-func _physics_process(_delta: float) -> void:
+func _process(delta):
 	if GameState.menu_visible:
+		interaction_is_holding = false
 		return
+		
+	if interaction_is_holding:
+		interaction_hold_time += delta
 		
 	direction = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	running = Input.is_action_pressed("move_run")
@@ -58,7 +69,11 @@ func _physics_process(_delta: float) -> void:
 		_handle_jump()
 		
 	if Input.is_action_just_pressed("interact_secondary"):
-		_handle_secondary_interaction()
+		interaction_is_holding = true
+		interaction_hold_time = 0.0
+	elif Input.is_action_just_released("interact_secondary"):
+		interaction_is_holding = false
+		_handle_secondary_interaction(interaction_hold_time < interaction_hold_threshold)
 		
 	if Input.is_action_just_pressed("interact"):
 		_handle_primary_interaction()
@@ -68,10 +83,14 @@ func _physics_process(_delta: float) -> void:
 func _handle_jump():
 	jumping = true
 	
-func _handle_secondary_interaction():
+func _handle_secondary_interaction(short_press : bool):
 	if player.held_object:
-		player.held_object.drop.rpc_id(1)
-	else:
+		if short_press:
+			player.held_object.drop.rpc_id(1)
+		else:
+			var impulse = -player.camera.global_transform.basis.z * lerp(throw_min_force, throw_max_force, clamp(interaction_hold_time / throw_max_charge_time, 0.0, 1.0))
+			player.held_object.throw.rpc_id(1, impulse)
+	elif short_press:
 		var pos = player.camera.global_transform.origin + -player.camera.global_transform.basis.z * 5
 		GameState.current_world.spawn_object.rpc_id(1, pos)
 	

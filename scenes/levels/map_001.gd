@@ -4,7 +4,7 @@ extends Node3D
 @onready var static_objects: Node3D = $StaticObjects
 @onready var dynamic_objects: Node3D = $DynamicObjects
 @onready var player_template = preload("res://objects/player.tscn")
-@onready var pickable_01 = preload("res://objects/pickable_01.tscn")
+@onready var pickable_01 = preload("res://objects/pickable_02.tscn")
 @onready var directional_light_3d: DirectionalLight3D = $DirectionalLight3D
 
 const SPAWN_RANDOM := 5.0

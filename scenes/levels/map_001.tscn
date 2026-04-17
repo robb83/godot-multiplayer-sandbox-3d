@@ -30,6 +30,8 @@ sky = SubResource("Sky_uftd1")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_fau81"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_p83bx"]
 size = Vector3(1000, 0.1, 1000)
 
@@ -65,6 +67,12 @@ shadow_enabled = true
 
 [node name="StaticObjects" type="Node3D" parent="." unique_id=1871595820]
 
+[node name="WorldBoundary" type="StaticBody3D" parent="StaticObjects" unique_id=1280201624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticObjects/WorldBoundary" unique_id=1628603585]
+shape = SubResource("WorldBoundaryShape3D_fau81")
+
 [node name="Floor" type="StaticBody3D" parent="StaticObjects" unique_id=98687026]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticObjects/Floor" unique_id=585354869]
@@ -76,7 +84,7 @@ mesh = SubResource("BoxMesh_uftd1")
 surface_material_override/0 = SubResource("StandardMaterial3D_m58ms")
 
 [node name="PlatformTranslate" parent="StaticObjects" unique_id=1997063188 instance=ExtResource("3_j0e1r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18292117, 16.298414)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.545837, 0.18292117, 16.298414)
 
 [node name="PlatformRotate" parent="StaticObjects" unique_id=1835857017 instance=ExtResource("5_5yqef")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.17386, 0, 0)
@@ -90,28 +98,91 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17, 
 [node name="DynamicObjects" type="Node3D" parent="." unique_id=749812872]
 
 [node name="Pickable01" parent="DynamicObjects" unique_id=561540773 instance=ExtResource("5_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.7, -8)
 
-[node name="Pickable02" parent="DynamicObjects" unique_id=685695639 instance=ExtResource("5_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1312523, 0.7, -8)
+[node name="Pickable02" parent="DynamicObjects" unique_id=1156059231 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.7, -9.5)
 
-[node name="Pickable03" parent="DynamicObjects" unique_id=1276614434 instance=ExtResource("5_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1391945, 0.7, -8)
+[node name="Pickable03" parent="DynamicObjects" unique_id=498946609 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.7, -11)
 
-[node name="Pickable04" parent="DynamicObjects" unique_id=306062987 instance=ExtResource("5_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1391945, 0.7, -10)
+[node name="Pickable04" parent="DynamicObjects" unique_id=771082680 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.7, -12.5)
 
-[node name="Pickable05" parent="DynamicObjects" unique_id=1170615955 instance=ExtResource("5_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.276514, 0.7, -10)
+[node name="Pickable05" parent="DynamicObjects" unique_id=1817177989 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.7, -14)
 
-[node name="Pickable06" parent="DynamicObjects" unique_id=193398605 instance=ExtResource("5_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.046, 0.7, -10)
+[node name="Pickable06" parent="DynamicObjects" unique_id=1258288315 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.7634442, -8.512812)
 
-[node name="Pickable07" parent="DynamicObjects" unique_id=463556823 instance=ExtResource("6_euqmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.7, -11.5)
+[node name="Pickable07" parent="DynamicObjects" unique_id=346141447 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.7634442, -10.012812)
 
-[node name="Pickable08" parent="DynamicObjects" unique_id=80363484 instance=ExtResource("9_y8wi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.7, -8)
+[node name="Pickable12" parent="DynamicObjects" unique_id=2114031556 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.7634442, -11.512812)
+
+[node name="Pickable13" parent="DynamicObjects" unique_id=259029866 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.7634442, -13.012812)
+
+[node name="Pickable14" parent="DynamicObjects" unique_id=810287407 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.7634442, -14.512812)
+
+[node name="Pickable16" parent="DynamicObjects" unique_id=1961877570 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2.8379838, -9.461542)
+
+[node name="Pickable17" parent="DynamicObjects" unique_id=475409540 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2.8379838, -10.961542)
+
+[node name="Pickable18" parent="DynamicObjects" unique_id=555339317 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2.8379838, -12.461542)
+
+[node name="Pickable19" parent="DynamicObjects" unique_id=1881448281 instance=ExtResource("5_euqmx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2.8379838, -13.961542)
+
+[node name="Pickable20" parent="DynamicObjects" unique_id=463556823 instance=ExtResource("6_euqmx")]
+transform = Transform3D(-0.028131036, 0, -0.9996042, 0, 1, 0, 0.9996042, 0, -0.028131036, 22.676712, 0.7, 11.351448)
+
+[node name="Pickable30" parent="DynamicObjects" unique_id=80363484 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 0.7, -18)
+
+[node name="Pickable31" parent="DynamicObjects" unique_id=1045069604 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 0.7, -19.5)
+
+[node name="Pickable32" parent="DynamicObjects" unique_id=156068297 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 0.7, -21)
+
+[node name="Pickable33" parent="DynamicObjects" unique_id=661206263 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 0.7, -22.5)
+
+[node name="Pickable34" parent="DynamicObjects" unique_id=580571300 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 0.7, -24)
+
+[node name="Pickable35" parent="DynamicObjects" unique_id=529875398 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 1.831013, -18.924562)
+
+[node name="Pickable36" parent="DynamicObjects" unique_id=479178422 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 1.831013, -20.424562)
+
+[node name="Pickable37" parent="DynamicObjects" unique_id=1191323942 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 1.831013, -21.924562)
+
+[node name="Pickable38" parent="DynamicObjects" unique_id=1149901959 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 1.831013, -23.424562)
+
+[node name="Pickable39" parent="DynamicObjects" unique_id=1870513171 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 1.831013, -24.924562)
+
+[node name="Pickable41" parent="DynamicObjects" unique_id=1225923834 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 2.949899, -19.63996)
+
+[node name="Pickable42" parent="DynamicObjects" unique_id=1981796946 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 2.949899, -21.13996)
+
+[node name="Pickable43" parent="DynamicObjects" unique_id=1758524821 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 2.949899, -22.63996)
+
+[node name="Pickable44" parent="DynamicObjects" unique_id=1659376667 instance=ExtResource("9_y8wi5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.842, 2.949899, -24.13996)
 
 [node name="Pickable09" parent="DynamicObjects" unique_id=103218068 instance=ExtResource("10_fau81")]
 transform = Transform3D(1, 0, 0, 0, -0.18592383, 0.98256415, 0, -0.98256415, -0.18592383, 23.634563, 1.0974209, 3.3301563)
@@ -123,10 +194,10 @@ transform = Transform3D(1, 0, 0, 0, -0.18592383, 0.98256415, 0, -0.98256415, -0.
 transform = Transform3D(1, 0, 0, 0, -0.18592383, 0.98256415, 0, -0.98256415, -0.18592383, 23.634563, 1.0974209, 3.7210937)
 
 [node name="VehicleCar1" parent="DynamicObjects" unique_id=2060147052 instance=ExtResource("9_rjccc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6286554, 1, -3.4059734)
 
 [node name="VehicleCar2" parent="DynamicObjects" unique_id=1966414900 instance=ExtResource("9_rjccc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.063, 1, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5656557, 1, -3.4059734)
 
 [node name="VehicleCar3" parent="DynamicObjects" unique_id=1366504230 instance=ExtResource("9_rjccc")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 25, 1, 0)

@@ -73,6 +73,14 @@ func drop():
 		if player and peer_id == player.player_peer_id:
 			set_player.rpc(-1, Vector3.ZERO)
 
+@rpc("any_peer", "call_local")
+func throw(impulse):
+	if multiplayer.is_server():
+		var peer_id = multiplayer.get_remote_sender_id()
+		if player and peer_id == player.player_peer_id:
+			set_player.rpc(-1, Vector3.ZERO)
+			apply_impulse(impulse)
+		
 @rpc("authority", "call_local")
 func set_player(peer_id : int, gp : Vector3):
 	if player:
