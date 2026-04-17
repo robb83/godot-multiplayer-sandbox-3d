@@ -66,68 +66,69 @@ func _ready():
 		ray_cast_interaction.add_exception(self)
 		ray_cast_forward.visible = true
 		ray_cast_forward.enabled = true
-	
-func _physics_process(delta):
-	if is_multiplayer_authority():
-		_process_authority(delta)
-	else:
-		_process_clients(delta)
 
-func _process_clients(_delta):
-	_change_collision()
-	
-func _process_authority(delta):
-	if crouching and not player_input.crouching:
-		crouching = ray_cast_up.get_collider() != null
-	else:
-		crouching = player_input.crouching
-	
-	if vehicle_object:
-		crouching = true
+func _process(delta):
+	if is_multiplayer_authority():
+		if crouching and not player_input.crouching:
+			crouching = ray_cast_up.get_collider() != null
+		else:
+			crouching = player_input.crouching
 		
-	_change_collision()
+		camera.rotation.x = player_input.orientation.x
+		rotation.y = player_input.orientation.y
 	
+		visual_eye_left.rotation.x = player_input.orientation.x
+		visual_eye_right.rotation.x = player_input.orientation.x
+	
+		var cam_transform = camera.global_transform
+		held_object_position = cam_transform.origin + -cam_transform.basis.z * player_input.hold_distance
+		held_object_rotation = player_input.object_rotation
+	
+		if vehicle_object:
+			crouching = true
+			position = position.move_toward(vehicle_object.to_global(vehicle_offset), 50 * delta)
+			rotation.y = player_input.orientation.y + vehicle_object.rotation.y
+	else:
+		if vehicle_object:
+			crouching = true
+			position = position.move_toward(vehicle_object.to_global(vehicle_offset), 50 * delta)
+			rotation.y = move_toward(rotation.y, wrapf(rotation.y + vehicle_object.rotation.y, -PI, PI), delta)
+			
+func _physics_process(delta):
+	
+	_change_collision()
+
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		
-	var cam_transform = camera.global_transform
-	held_object_position = cam_transform.origin + -cam_transform.basis.z * player_input.hold_distance
-	held_object_rotation = player_input.object_rotation
-		
-	camera.rotation.x = player_input.orientation.x
-	rotation.y = player_input.orientation.y
-	
-	visual_eye_left.rotation.x = player_input.orientation.x
-	visual_eye_right.rotation.x = player_input.orientation.x
-
 	if vehicle_object:
-		position = position.move_toward(vehicle_object.to_global(vehicle_offset), 100 * delta)
-		rotation.y = rotation.y + vehicle_object.rotation.y
+		return
 	else:
-		if player_input.jumping and is_on_floor():
-			velocity.y = jump_force
-			player_input.jumping = false
+		if is_multiplayer_authority():
+			if player_input.jumping and is_on_floor():
+				velocity.y = jump_force
+				player_input.jumping = false
 
-		var target_speed = run_speed if player_input.running else walk_speed
-		if crouching:
-			target_speed = crouch_speed
+			var target_speed = run_speed if player_input.running else walk_speed
+			if crouching:
+				target_speed = crouch_speed
+				
+			current_speed = lerp(current_speed, target_speed, acceleration * delta)
 			
-		current_speed = lerp(current_speed, target_speed, acceleration * delta)
-		
-		var direction = (transform.basis * Vector3(player_input.direction.x, 0, player_input.direction.y)).normalized()
-		if direction:
-			velocity.x = direction.x * current_speed
-			velocity.z = direction.z * current_speed
-		else:
-			if is_on_floor():
-				velocity.x = move_toward(velocity.x, 0, current_speed)
-				velocity.z = move_toward(velocity.z, 0, current_speed)
+			var direction = (transform.basis * Vector3(player_input.direction.x, 0, player_input.direction.y)).normalized()
+			if direction:
+				velocity.x = direction.x * current_speed
+				velocity.z = direction.z * current_speed
+			else:
+				if is_on_floor():
+					velocity.x = move_toward(velocity.x, 0, current_speed)
+					velocity.z = move_toward(velocity.z, 0, current_speed)
 
-		#NOTE: first try to reduce big push from rigidbodies
-		if velocity.length() > max_velocity:
-			velocity = velocity.normalized() * max_velocity
-		
-		move_and_slide()
+			#NOTE: first try to reduce big push from rigidbodies
+			if velocity.length() > max_velocity:
+				velocity = velocity.normalized() * max_velocity
+			
+			move_and_slide()
 
 func _change_collision():
 	if crouching:

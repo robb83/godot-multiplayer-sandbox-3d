@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://cvwvcwvh4f0e8" path="res://assets/freesounds/748027__dmitry_mansurev64__sedan-engine-loop.ogg" id="2_i18a2"]
 [ext_resource type="Material" uid="uid://da3ial3wt8ruc" path="res://resources/vehicle_car_spoiler.tres" id="2_jossu"]
 [ext_resource type="AudioStream" uid="uid://ci51r5aooyvrf" path="res://assets/freesounds/434819__dersuperanton__blinker-in-car_edited.ogg" id="3_ijgw1"]
+[ext_resource type="CylinderMesh" uid="uid://c3gl8h1iruyig" path="res://resources/vehicle_car_wheel_mesh.tres" id="3_wucup"]
 [ext_resource type="AudioStream" uid="uid://bfhbun5gte4dq" path="res://assets/freesounds/828939__splicesound__1933-austin-10-clifton-roadster-horn_edited.ogg" id="4_xfqwl"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jossu"]
@@ -80,11 +81,6 @@ size = Vector3(0.1, 0.8, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3oxka"]
 size = Vector3(2.5, 0.3, 4)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_7vf3j"]
-top_radius = 0.4
-bottom_radius = 0.4
-height = 0.3
 
 [node name="VehicleCar" type="VehicleBody3D" unique_id=2060147052]
 mass = 1200.0
@@ -162,7 +158,7 @@ damping_relaxation = 2.0
 
 [node name="WheelMesh" type="MeshInstance3D" parent="Wheel_FR" unique_id=1974899767]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_7vf3j")
+mesh = ExtResource("3_wucup")
 surface_material_override/0 = ExtResource("2_3oxka")
 
 [node name="Wheel_RL" type="VehicleWheel3D" parent="." unique_id=368176311]
@@ -177,7 +173,7 @@ damping_relaxation = 2.0
 
 [node name="WheelMesh" type="MeshInstance3D" parent="Wheel_RL" unique_id=869193096]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_7vf3j")
+mesh = ExtResource("3_wucup")
 surface_material_override/0 = ExtResource("2_3oxka")
 
 [node name="Wheel_RR" type="VehicleWheel3D" parent="." unique_id=1234832852]
@@ -192,7 +188,7 @@ damping_relaxation = 2.0
 
 [node name="WheelMesh" type="MeshInstance3D" parent="Wheel_RR" unique_id=1826255058]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_7vf3j")
+mesh = ExtResource("3_wucup")
 surface_material_override/0 = ExtResource("2_3oxka")
 
 [node name="Wheel_FL" type="VehicleWheel3D" parent="." unique_id=1836508783]
@@ -207,7 +203,7 @@ damping_relaxation = 2.0
 
 [node name="WheelMesh" type="MeshInstance3D" parent="Wheel_FL" unique_id=675440159]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_7vf3j")
+mesh = ExtResource("3_wucup")
 surface_material_override/0 = ExtResource("2_3oxka")
 
 [node name="LightFrontRight" type="SpotLight3D" parent="." unique_id=575549530]

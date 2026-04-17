@@ -81,13 +81,13 @@ func _ready():
 	
 func _process(_delta: float):
 	_handle_horn_sound()
+	_handle_lights(_delta)
+	_update_engine_sound(engine_rpm, engine_max_rpm)
 	
 func _physics_process(delta):
 	_read_input()
 	_update_transmission(delta)
 	_apply_input(delta)
-	_handle_lights(delta)
-	_update_engine_sound(engine_rpm, engine_max_rpm)
 	
 func _read_input():
 	if player_driver and is_instance_valid(player_driver):

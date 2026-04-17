@@ -1,6 +1,8 @@
 extends Node
 class_name PlayerVehicleInput
 
+@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
+
 @export var player : Player = null
 @export var input_throttle : float = 0.0
 @export var input_brake : float = 0.0
@@ -11,7 +13,8 @@ func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_physics_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_input(get_multiplayer_authority() == multiplayer.get_unique_id())
-
+	multiplayer_synchronizer.add_visibility_filter(func (id): return player.vehicle_driver )
+	
 func _physics_process(delta: float):
 	_read_input()
 	
