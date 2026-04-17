@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cj74uk6yjvcay" path="res://objects/static_garage.tscn" id="5_u1jbu"]
 [ext_resource type="PackedScene" uid="uid://b084jjum1hopk" path="res://objects/pickable_02.tscn" id="6_euqmx"]
 [ext_resource type="PackedScene" uid="uid://cod7e0gfcx0k5" path="res://objects/platform_tunnel.tscn" id="6_kkhy5"]
-[ext_resource type="PackedScene" uid="uid://c5pkq7p3gmxsq" path="res://objects/vehicle_car.tscn" id="9_rjccc"]
+[ext_resource type="PackedScene" uid="uid://crclfbh4hxcc5" path="res://objects/vehicle_car.tscn" id="9_rjccc"]
 [ext_resource type="PackedScene" uid="uid://bm5nwxv6k38v2" path="res://objects/pickable_03.tscn" id="9_y8wi5"]
 [ext_resource type="PackedScene" uid="uid://di8boooqu3i71" path="res://objects/pickable_04.tscn" id="10_fau81"]
 
@@ -31,10 +31,10 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p83bx"]
-size = Vector3(200, 0.1, 200)
+size = Vector3(1000, 0.1, 1000)
 
 [sub_resource type="BoxMesh" id="BoxMesh_uftd1"]
-size = Vector3(200, 0.1, 200)
+size = Vector3(1000, 0.1, 1000)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58ms"]
 vertex_color_is_srgb = true
@@ -53,7 +53,7 @@ replication_config = SubResource("SceneReplicationConfig_rjccc")
 spawn_path = NodePath("../Players")
 
 [node name="MultiplayerSpawnerObjects" type="MultiplayerSpawner" parent="." unique_id=719119265]
-_spawnable_scenes = PackedStringArray("uid://c0vkbc3tby3wp", "uid://b084jjum1hopk", "uid://c5pkq7p3gmxsq", "uid://bm5nwxv6k38v2", "uid://di8boooqu3i71")
+_spawnable_scenes = PackedStringArray("uid://c0vkbc3tby3wp", "uid://b084jjum1hopk", "uid://crclfbh4hxcc5", "uid://bm5nwxv6k38v2", "uid://di8boooqu3i71")
 spawn_path = NodePath("../DynamicObjects")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=249213399]

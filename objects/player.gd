@@ -95,13 +95,14 @@ func _process_authority(delta):
 	held_object_rotation = player_input.object_rotation
 		
 	camera.rotation.x = player_input.orientation.x
-	self.rotation.y = player_input.orientation.y
+	rotation.y = player_input.orientation.y
 	
 	visual_eye_left.rotation.x = player_input.orientation.x
 	visual_eye_right.rotation.x = player_input.orientation.x
 
 	if vehicle_object:
-		global_position = vehicle_object.to_global(vehicle_offset)
+		position = position.move_toward(vehicle_object.to_global(vehicle_offset), 100 * delta)
+		rotation.y = rotation.y + vehicle_object.rotation.y
 	else:
 		if player_input.jumping and is_on_floor():
 			velocity.y = jump_force
