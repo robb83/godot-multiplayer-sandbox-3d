@@ -7,7 +7,7 @@ extends Node3D
 var state_open : bool = false
 
 func _ready():
-	animatable_body_3d.set_meta('object', self)
+	animatable_body_3d.set_meta('interactable', self)
 	
 func _update_state():
 	if animation_player.is_playing():

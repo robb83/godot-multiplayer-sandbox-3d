@@ -79,7 +79,7 @@ shape = SubResource("WorldBoundaryShape3D_fau81")
 shape = SubResource("BoxShape3D_p83bx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObjects/Floor" unique_id=168930226]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.055800915, -1.9073486e-06, 0.18320465)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060582638, -0.01902628, 0.20469809)
 mesh = SubResource("BoxMesh_uftd1")
 surface_material_override/0 = SubResource("StandardMaterial3D_m58ms")
 

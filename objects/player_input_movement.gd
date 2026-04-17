@@ -100,16 +100,16 @@ func _handle_primary_interaction():
 		var collider = result
 		var collision_point = player.ray_cast_interaction.get_collision_point()
 		if collider.is_in_group("interactable"):
-			var object = collider.get_meta("object")
-			object.interact.rpc_id(1)
+			var controller = collider.get_meta("interactable")
+			controller.interact.rpc_id(1)
 		if collider.is_in_group("driveable"):
-			var object = collider.get_meta("object")
-			object.drive.rpc_id(1)
+			var controller = collider.get_meta("driveable")
+			controller.drive.rpc_id(1)
 		elif collider.is_in_group("pickable"):
-			var object = collider.get_meta("object")
+			var controller = collider.get_meta("pickable")
 			object_rotation = Vector2.ZERO
 			object_distance = clamp(collider.global_position.distance_to(player.global_position), object_min_distance, object_max_distance)
-			object.pickup.rpc_id(1, object.to_local(collision_point))
+			controller.pickup.rpc_id(1, controller.target.to_local(collision_point))
 
 func _handle_interaction_visual_feedback():
 	var msi = player.mouse_state_indicator

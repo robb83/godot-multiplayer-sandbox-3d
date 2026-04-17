@@ -4,6 +4,7 @@
 [ext_resource type="Material" uid="uid://6w7h161ai2l0" path="res://resources/vehicle_car_wheel.tres" id="2_3oxka"]
 [ext_resource type="AudioStream" uid="uid://cvwvcwvh4f0e8" path="res://assets/freesounds/748027__dmitry_mansurev64__sedan-engine-loop.ogg" id="2_i18a2"]
 [ext_resource type="Material" uid="uid://da3ial3wt8ruc" path="res://resources/vehicle_car_spoiler.tres" id="2_jossu"]
+[ext_resource type="Script" uid="uid://drtysusjsic5w" path="res://scripts/pickable.gd" id="2_nocom"]
 [ext_resource type="AudioStream" uid="uid://ci51r5aooyvrf" path="res://assets/freesounds/434819__dersuperanton__blinker-in-car_edited.ogg" id="3_ijgw1"]
 [ext_resource type="CylinderMesh" uid="uid://c3gl8h1iruyig" path="res://resources/vehicle_car_wheel_mesh.tres" id="3_wucup"]
 [ext_resource type="AudioStream" uid="uid://bfhbun5gte4dq" path="res://assets/freesounds/828939__splicesound__1933-austin-10-clifton-roadster-horn_edited.ogg" id="4_xfqwl"]
@@ -82,13 +83,18 @@ size = Vector3(0.1, 0.8, 0.1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3oxka"]
 size = Vector3(2.5, 0.3, 4)
 
-[node name="VehicleCar" type="VehicleBody3D" unique_id=2060147052]
+[node name="VehicleCar" type="VehicleBody3D" unique_id=2060147052 groups=["pickable"]]
 mass = 1200.0
 angular_damp = 5.0
 script = ExtResource("1_7vf3j")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1270138943]
 replication_config = SubResource("SceneReplicationConfig_jossu")
+
+[node name="Pickable" type="Node" parent="." unique_id=641065516 node_paths=PackedStringArray("target")]
+script = ExtResource("2_nocom")
+target = NodePath("..")
+metadata/_custom_type_script = "uid://drtysusjsic5w"
 
 [node name="Seats" type="Node3D" parent="." unique_id=1344830861]
 
@@ -107,9 +113,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_a4a5n")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Seats/DriverSeat1" unique_id=1598088261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.08)
 shape = SubResource("BoxShape3D_jossu")
-
-[node name="Camera3D" type="Camera3D" parent="Seats/DriverSeat1" unique_id=694098574]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7881393e-07, 1.5002704, 2.0121636)
 
 [node name="PassangerSeat1" type="Area3D" parent="Seats" unique_id=1765394035 groups=["interactable"]]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6, 0.2, 1.2)

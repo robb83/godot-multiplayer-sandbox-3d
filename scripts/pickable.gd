@@ -1,17 +1,23 @@
-extends RigidBody3D
+extends Node
 class_name Pickable
 
 const max_distance : float = 12
 const angular_force : float = 15.0
 const too_weak : float = 6.0 #TODO:
 
+@export var target : Node3D = null
+var target_has_callback : bool = false
 var player : Player = null
 var grab_point : Vector3 = Vector3.ZERO
 var rotation_progress : Vector2 = Vector2.ZERO
 
 func _ready():
-	add_to_group("pickable", true)
-	set_meta("object", self)
+	if target:
+		target.add_to_group("pickable", true)
+		target.set_meta("pickable", self)
+		target_has_callback = target.has_method("can_pickup")
+	else:
+		printerr("[Pickable] target is null")
 	
 func _physics_process(_delta: float) -> void:
 	_held_object_check()
@@ -23,11 +29,11 @@ func _held_object_check():
 			drop.rpc_id(1)
 			return
 		
-		if player.global_position.distance_to(global_position) >= max_distance:
+		if player.global_position.distance_to(target.global_position) >= max_distance:
 			drop.rpc_id(1)
 			return
 			
-		var current_pos = to_global(grab_point)
+		var current_pos = target.to_global(grab_point)
 		var linear_movement = player.held_object_position - current_pos
 		if linear_movement.length() > too_weak:
 			drop.rpc_id(1)
@@ -36,14 +42,14 @@ func _held_object_check():
 func _held_object_move():
 	if player and is_instance_valid(player):
 		#var current_pos = global_transform.origin
-		var current_pos = to_global(grab_point)
+		var current_pos = target.to_global(grab_point)
 		var linear_movement = player.held_object_position - current_pos
 		
 		if linear_movement.length() > too_weak:
 			return
 		
 		# linear movement
-		linear_velocity = (linear_movement * player.strength) / mass
+		target.linear_velocity = (linear_movement * player.strength) / target.mass
 		
 		# angular movement or rotation
 		var diff = player.held_object_rotation - rotation_progress
@@ -51,20 +57,21 @@ func _held_object_move():
 		#held_object.rotate(camera.global_transform.basis.x, -wrapf(diff.x, -PI, PI))
 		#held_object.rotate(camera.global_transform.basis.y, -wrapf(diff.y, -PI, PI))
 		var target_angular_velocity = Vector3(-diff.x, -diff.y, 0.0) * angular_force
-		var delta_av = target_angular_velocity - angular_velocity
+		var delta_av = target_angular_velocity - target.angular_velocity
 		var torque = delta_av * player.strength
-		apply_torque(torque)
+		target.apply_torque(torque)
 	
 @rpc("any_peer", "call_local")
 func pickup(gp : Vector3):
 	if multiplayer.is_server():
 		if player:
 			return
-		var peer_id = multiplayer.get_remote_sender_id()
-		var p = GameState.current_world.get_player_by_peer(peer_id)
-		if p and is_instance_valid(p) and p.held_object == null:
-			if gp and gp.length() < max_distance and p.global_position.distance_to(global_position) < max_distance:
-				set_player.rpc(peer_id, gp)
+		if not target_has_callback or (target_has_callback and target.can_pickup()):
+			var peer_id = multiplayer.get_remote_sender_id()
+			var p = GameState.current_world.get_player_by_peer(peer_id)
+			if p and is_instance_valid(p) and p.held_object == null:
+				if gp and gp.length() < max_distance and p.global_position.distance_to(target.global_position) < max_distance:
+					set_player.rpc(peer_id, gp)
 
 @rpc("any_peer", "call_local")
 func drop():
@@ -79,12 +86,12 @@ func throw(impulse):
 		var peer_id = multiplayer.get_remote_sender_id()
 		if player and peer_id == player.player_peer_id:
 			set_player.rpc(-1, Vector3.ZERO)
-			apply_impulse(impulse)
+			target.apply_impulse(impulse)
 		
 @rpc("authority", "call_local")
 func set_player(peer_id : int, gp : Vector3):
 	if player:
-		remove_collision_exception_with(player)
+		target.remove_collision_exception_with(player)
 		player.set_held_object(null)
 		
 	rotation_progress = Vector2.ZERO
@@ -92,5 +99,5 @@ func set_player(peer_id : int, gp : Vector3):
 	player = GameState.current_world.get_player_by_peer(peer_id)
 	
 	if player and is_instance_valid(player):
-		add_collision_exception_with(player)
+		target.add_collision_exception_with(player)
 		player.set_held_object(self)

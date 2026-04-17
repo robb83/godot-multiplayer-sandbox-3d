@@ -73,9 +73,12 @@ var blink_timer := 0.0
 var blinker_value := false
 var blinker_enabled := false
 
+func can_pickup():
+	return player_driver == null and player_passanger == null
+	
 func _ready():
-	driver_seat_1.set_meta('object', self)
-	passanger_seat_1.set_meta('object', self)
+	driver_seat_1.set_meta('driveable', self)
+	passanger_seat_1.set_meta('interactable', self)
 	engine_sound.play()
 	wheel_radius = wheel_fr.wheel_radius
 	
