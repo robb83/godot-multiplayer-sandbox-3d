@@ -8,22 +8,19 @@ signal state_changed
 signal player_connected
 signal player_disconnected
 
-var is_server := false
 var current_id : int = -1
 var state : NetworkState = NetworkState.NOT_CONNECTED
 var original_title = null
 
 func _ready():
-	multiplayer.server_relay = false
+	multiplayer.server_relay = true
 	multiplayer.peer_connected.connect(_player_connected)
 	multiplayer.peer_disconnected.connect(_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	
-func network_host(port):
-	is_server = true
-	
+func network_host(port):	
 	var peer = ENetMultiplayerPeer.new()
 	var err := peer.create_server(port, 4)
 	if err == OK:
@@ -36,7 +33,6 @@ func network_host(port):
 	return err
 	
 func network_join(ip, port):
-	is_server = false
 	_set_state(NetworkState.CONNECTING)
 	
 	var peer = ENetMultiplayerPeer.new()
@@ -51,7 +47,6 @@ func network_join(ip, port):
 	
 func network_disconnect():
 	multiplayer.set_multiplayer_peer(null)
-	is_server = false
 	_set_state(NetworkState.NOT_CONNECTED)
 	
 func network_kick(peer_id):
@@ -74,13 +69,11 @@ func _on_connected_fail():
 	print("[%s] _on_connected_fail" % [current_id])
 	multiplayer.set_multiplayer_peer(null)
 	_set_state(NetworkState.NOT_CONNECTED)
-	is_server = false
 	
 func _on_server_disconnected():
 	print("[%s] _on_server_disconnected" % [current_id])
 	multiplayer.set_multiplayer_peer(null)
 	_set_state(NetworkState.NOT_CONNECTED)
-	is_server = false
 
 func _set_state(s):
 	state = s

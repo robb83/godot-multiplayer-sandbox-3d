@@ -1,8 +1,6 @@
 extends Node
 class_name PlayerInput
 
-@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
-
 @export var jumping := false
 @export var running := false
 @export var crouching := false
@@ -24,7 +22,6 @@ func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_physics_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_input(get_multiplayer_authority() == multiplayer.get_unique_id())
-	multiplayer_synchronizer.add_visibility_filter(func(id): return id == 1)
 	
 @rpc("any_peer", "call_local", "reliable")
 func jump():

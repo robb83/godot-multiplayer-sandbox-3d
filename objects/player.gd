@@ -22,12 +22,8 @@ class_name Player
 @export var held_object_position : Vector3 = Vector3.ZERO
 @export var held_object_rotation : Vector2 = Vector2.ZERO
 @export var crouching : bool = false
-@export var player_peer_id := 1:
-	set(peer_id):
-		player_peer_id = peer_id
-		$PlayerInput.set_multiplayer_authority(peer_id)
+@export var player_peer_id := 1
 
-var current_map = null
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var current_speed = 0.0
 var acceleration = 2.0
@@ -42,8 +38,12 @@ var held_object = null
 func set_held_object(object):
 	held_object = object
 
+func _enter_tree() -> void:
+	set_multiplayer_authority(player_peer_id)
+	
 func _ready():
-	if player_peer_id == multiplayer.get_unique_id():
+	
+	if is_multiplayer_authority():
 		visuals.visible = false
 		camera_pivot.visible = true
 		camera.current = true
@@ -58,14 +58,8 @@ func _ready():
 		ray_cast_forward.visible = true
 		ray_cast_forward.enabled = true
 	
-	# needed for server to check space above head
-	if is_multiplayer_authority():
-		ray_cast_up.visible = true
-		ray_cast_up.enabled = true
-	
 func _physics_process(delta):
-	var owners = player_peer_id == multiplayer.get_unique_id() or is_multiplayer_authority()
-	if owners:
+	if is_multiplayer_authority():
 		_process_authority(delta)
 	else:
 		_process_clients(delta)

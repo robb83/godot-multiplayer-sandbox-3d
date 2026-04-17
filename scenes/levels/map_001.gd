@@ -14,7 +14,12 @@ const EPSILON = 0.0001
 @export var day_speed := 0.0025
 
 func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	$MultiplayerSpawnerPlayers.spawn_function = _handle_player_spawn
+	if multiplayer.is_server():
+		add_player(1)
+		for id in multiplayer.get_peers():
+			GameState.current_world.add_player(id)
 
 func _physics_process(delta):
 	_handle_sun(delta)
@@ -28,11 +33,13 @@ func _exit_tree() -> void:
 func _handle_player_spawn(data):
 	print("[%s] _handle_player_spawn: %s" % [multiplayer.get_unique_id(), str(data)])
 	
+	var player_peer_id = data[0]
+	var player_position = data[1]
+	
 	var character = player_template.instantiate()
-	character.current_map = self
-	character.player_peer_id = data[0]
-	character.position = data[1]
-	character.name = str(data[0])
+	character.player_peer_id = player_peer_id
+	character.name = str(player_peer_id)
+	character.position = player_position
 	return character
 
 func _handle_sun(delta):
@@ -64,6 +71,7 @@ func get_sun_color(sun_direction: Vector3) -> Color:
 		return night_color.lerp(sunrise_color, night_t)
 		
 func add_player(id: int):
+	print("[%s] add_player " % [multiplayer.get_unique_id()])
 	var dir := Vector2.from_angle(randf() * 2 * PI)
 	var pos := Vector3(dir.x * SPAWN_RANDOM * randf(), 0, dir.y * SPAWN_RANDOM * randf())
 	$MultiplayerSpawnerPlayers.spawn([id, pos])
