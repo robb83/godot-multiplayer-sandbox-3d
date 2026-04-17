@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b3ght6ha4qhii" path="res://objects/player.gd" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://xu36p8xcpch7" path="res://objects/player_input.gd" id="2_uxov2"]
 [ext_resource type="Script" uid="uid://c5ev3qcgsavm2" path="res://scripts/mouse_indicator.gd" id="2_ykyjo"]
+[ext_resource type="Script" uid="uid://sjd6c454xd3s" path="res://objects/player_vehicle_input.gd" id="3_nmc1l"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_uxov2"]
 properties/0/path = NodePath(".:position")
@@ -29,6 +30,20 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath(".:held_object_rotation")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nmc1l"]
+properties/0/path = NodePath(".:input_throttle")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:input_brake")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:input_steering")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:input_horn")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4flbx"]
 
@@ -67,6 +82,14 @@ replication_config = SubResource("SceneReplicationConfig_uxov2")
 [node name="PlayerInput" type="Node" parent="." unique_id=1848566266 node_paths=PackedStringArray("player")]
 script = ExtResource("2_uxov2")
 player = NodePath("..")
+
+[node name="PlayerVehicleInput" type="Node" parent="." unique_id=1742775793 node_paths=PackedStringArray("player")]
+script = ExtResource("3_nmc1l")
+player = NodePath("..")
+metadata/_custom_type_script = "uid://sjd6c454xd3s"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerVehicleInput" unique_id=1799094365]
+replication_config = SubResource("SceneReplicationConfig_nmc1l")
 
 [node name="MouseStateIndicator" type="Node2D" parent="." unique_id=127833990]
 visible = false

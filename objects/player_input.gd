@@ -1,13 +1,13 @@
 extends Node
 class_name PlayerInput
 
+@export var player : Player = null
 @export var jumping := false
 @export var running := false
 @export var crouching := false
 @export var direction := Vector2()
-@export var hold_distance : float = 8.0
-@export var player : Player = null
 @export var orientation : Vector2 = Vector2.ZERO
+@export var hold_distance : float = 8.0
 @export var object_rotation : Vector2 = Vector2.ZERO
 
 var mouse_sensitivity : float = 0.01
@@ -22,10 +22,6 @@ func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_physics_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_input(get_multiplayer_authority() == multiplayer.get_unique_id())
-	
-@rpc("any_peer", "call_local", "reliable")
-func jump():
-	jumping = true
 	
 func _input(event):
 	if GameState.menu_visible:
@@ -70,8 +66,7 @@ func _physics_process(_delta: float) -> void:
 	_handle_interaction_visual_feedback()
 	
 func _handle_jump():
-	jumping = true # local
-	jump.rpc_id(1) # server
+	jumping = true
 	
 func _handle_secondary_interaction():
 	if player.held_object:

@@ -4,6 +4,7 @@ class_name Player
 @onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer1
 @onready var mouse_state_indicator: MouseStateIndicator = $MouseStateIndicator
 @onready var player_input: PlayerInput = $PlayerInput
+@onready var player_vehicle_input: PlayerVehicleInput = $PlayerVehicleInput
 @onready var camera: Camera3D = $CameraPivot/Camera3D
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var ray_cast_down: RayCast3D = $RayCastDown
@@ -34,10 +35,18 @@ var jump_force = 4.0
 var max_velocity : float = 20.0
 var strength : float = 100
 var held_object = null
+var vehicle_object = null
+var vehicle_offset = null
+var vehicle_driver = false
 
 func set_held_object(object):
 	held_object = object
 
+func set_vehicle(vehicle, offset, can_drive):
+	vehicle_object = vehicle
+	vehicle_offset = offset
+	vehicle_driver = can_drive
+	
 func _enter_tree() -> void:
 	set_multiplayer_authority(player_peer_id)
 	
@@ -73,6 +82,9 @@ func _process_authority(delta):
 	else:
 		crouching = player_input.crouching
 	
+	if vehicle_object:
+		crouching = true
+		
 	_change_collision()
 	
 	if not is_on_floor():
@@ -88,30 +100,33 @@ func _process_authority(delta):
 	visual_eye_left.rotation.x = player_input.orientation.x
 	visual_eye_right.rotation.x = player_input.orientation.x
 
-	if player_input.jumping and is_on_floor():
-		velocity.y = jump_force
-		player_input.jumping = false
-
-	var target_speed = run_speed if player_input.running else walk_speed
-	if crouching:
-		target_speed = crouch_speed
-		
-	current_speed = lerp(current_speed, target_speed, acceleration * delta)
-	
-	var direction = (transform.basis * Vector3(player_input.direction.x, 0, player_input.direction.y)).normalized()
-	if direction:
-		velocity.x = direction.x * current_speed
-		velocity.z = direction.z * current_speed
+	if vehicle_object:
+		global_position = vehicle_object.to_global(vehicle_offset)
 	else:
-		if is_on_floor():
-			velocity.x = move_toward(velocity.x, 0, current_speed)
-			velocity.z = move_toward(velocity.z, 0, current_speed)
+		if player_input.jumping and is_on_floor():
+			velocity.y = jump_force
+			player_input.jumping = false
 
-	#NOTE: first try to reduce big push from rigidbodies
-	if velocity.length() > max_velocity:
-		velocity = velocity.normalized() * max_velocity
-	
-	move_and_slide()
+		var target_speed = run_speed if player_input.running else walk_speed
+		if crouching:
+			target_speed = crouch_speed
+			
+		current_speed = lerp(current_speed, target_speed, acceleration * delta)
+		
+		var direction = (transform.basis * Vector3(player_input.direction.x, 0, player_input.direction.y)).normalized()
+		if direction:
+			velocity.x = direction.x * current_speed
+			velocity.z = direction.z * current_speed
+		else:
+			if is_on_floor():
+				velocity.x = move_toward(velocity.x, 0, current_speed)
+				velocity.z = move_toward(velocity.z, 0, current_speed)
+
+		#NOTE: first try to reduce big push from rigidbodies
+		if velocity.length() > max_velocity:
+			velocity = velocity.normalized() * max_velocity
+		
+		move_and_slide()
 
 func _change_collision():
 	if crouching:
