@@ -1,5 +1,5 @@
 extends Node
-class_name PlayerInput
+class_name PlayerInputMovement
 
 @export var player : Player = null
 @export var jumping := false
@@ -7,14 +7,14 @@ class_name PlayerInput
 @export var crouching := false
 @export var direction := Vector2()
 @export var orientation : Vector2 = Vector2.ZERO
-@export var hold_distance : float = 8.0
+@export var object_distance : float = 8.0
 @export var object_rotation : Vector2 = Vector2.ZERO
 
 var mouse_sensitivity : float = 0.01
 var pitch_min : float = deg_to_rad(-70)
 var pitch_max : float = deg_to_rad(70)
-var min_hold_distance : float = 1.5
-var max_hold_distance : float = 8.0
+var object_min_distance : float = 1.5
+var object_max_distance : float = 8.0
 var scroll_speed : float = 0.5
 var rotating_object : bool = false
 
@@ -32,9 +32,9 @@ func _input(event):
 			rotating_object = event.pressed
 			
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
-			hold_distance = clamp(hold_distance + scroll_speed, min_hold_distance, max_hold_distance)
+			object_distance = clamp(object_distance + scroll_speed, object_min_distance, object_max_distance)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
-			hold_distance = clamp(hold_distance - scroll_speed, min_hold_distance, max_hold_distance)
+			object_distance = clamp(object_distance - scroll_speed, object_min_distance, object_max_distance)
 		
 	if event is InputEventMouseMotion:
 		if rotating_object:
@@ -70,11 +70,7 @@ func _handle_jump():
 	
 func _handle_secondary_interaction():
 	if player.held_object:
-		print(player.held_object)
-		if is_instance_valid(player.held_object):
-			player.held_object.drop.rpc_id(1)
-		else:
-			player.held_object = null
+		player.held_object.drop.rpc_id(1)
 	else:
 		var pos = player.camera.global_transform.origin + -player.camera.global_transform.basis.z * 5
 		GameState.current_world.spawn_object.rpc_id(1, pos)
@@ -93,7 +89,7 @@ func _handle_primary_interaction():
 		elif collider.is_in_group("pickable"):
 			var object = collider.get_meta("object")
 			object_rotation = Vector2.ZERO
-			hold_distance = clamp(collider.global_position.distance_to(player.global_position), min_hold_distance, max_hold_distance)
+			object_distance = clamp(collider.global_position.distance_to(player.global_position), object_min_distance, object_max_distance)
 			object.pickup.rpc_id(1, object.to_local(collision_point))
 
 func _handle_interaction_visual_feedback():

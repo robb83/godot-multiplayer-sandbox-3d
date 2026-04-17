@@ -28,7 +28,7 @@ texture_filter = 5
 
 [node name="Pickable01" type="RigidBody3D" unique_id=1156059231 groups=["pickable"]]
 input_ray_pickable = false
-mass = 100.0
+mass = 25.0
 angular_damp = 5.0
 script = ExtResource("1_coa6w")
 metadata/_custom_type_script = "uid://drtysusjsic5w"

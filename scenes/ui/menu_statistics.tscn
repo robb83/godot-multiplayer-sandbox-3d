@@ -11,22 +11,15 @@ script = ExtResource("1_bve2u")
 autostart = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1797368909]
-custom_minimum_size = Vector2(100, 150)
-layout_mode = 1
+layout_mode = 0
 offset_right = 422.0
 offset_bottom = 150.0
 
-[node name="LabelTitle" type="Label" parent="VBoxContainer" unique_id=221012920]
+[node name="LabelFPS" type="Label" parent="VBoxContainer" unique_id=221012920]
 layout_mode = 2
 text = "Network Statistics"
 
-[node name="LabelStatistics" type="Label" parent="VBoxContainer" unique_id=435115788]
+[node name="LabelNetwork" type="Label" parent="VBoxContainer" unique_id=435115788]
 layout_mode = 2
-
-[node name="ItemListPeers" type="ItemList" parent="VBoxContainer" unique_id=1977376260]
-layout_mode = 2
-size_flags_vertical = 3
-allow_search = false
 
 [connection signal="timeout" from="Timer" to="." method="update_peers"]
-[connection signal="item_clicked" from="VBoxContainer/ItemListPeers" to="." method="_on_item_list_peers_item_clicked"]

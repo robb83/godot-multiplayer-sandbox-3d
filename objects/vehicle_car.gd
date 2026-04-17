@@ -40,7 +40,7 @@ const max_pitch := 2.2
 @export var steering_scale = 0.5
 @export var gear_ratios := [-1.5, 0, 1.5, 1.75, 2.3, 2.7, 3.1]
 @export var shift_time := 0.2
-@export var engine_torque := 1000.0
+@export var engine_torque := 2000.0
 @export var handbrake_force := 75.0
 @export var brake_force := 50.0
 @export var engine_max_rpm := 7000.0
@@ -91,7 +91,7 @@ func _physics_process(delta):
 	
 func _read_input():
 	if player_driver and is_instance_valid(player_driver):
-		var input = player_driver.player_vehicle_input
+		var input = player_driver.player_input_vehicle
 		
 		input_throttle = input.input_throttle
 		input_brake = input.input_brake
@@ -108,7 +108,7 @@ func _handle_horn_sound():
 	if horn:
 		if not horn_sound.playing:
 			horn_sound.play()
-		var pos = horn_sound.get_playback_position()		
+		var pos = horn_sound.get_playback_position()
 		if pos >= 0.55:
 			horn_sound.seek(0.18)
 			
@@ -121,7 +121,7 @@ func _update_engine_sound(rpm: float, max_rpm: float):
 	engine_sound.volume_db = volume
 	
 func _apply_input(delta):
-	##TODO: need some research; idk what im doing...	
+	##TODO: need some research; idk what im doing...
 	var engine_target_rpm := engine_idle_rpm + input_throttle * (engine_max_rpm - engine_idle_rpm)
 	var engine_rec_up_speed_free = 3000 * (1 - clutch)
 	var engine_rec_up_speed_fall_engaed = 1000 * (1 - input_throttle)
@@ -209,30 +209,30 @@ func _shift_gear(new_gear):
 
 @rpc("any_peer", "call_local")
 func interact():
-	if multiplayer.is_server():			
+	if multiplayer.is_server():
 		var peer_id = multiplayer.get_remote_sender_id()
 		var p = GameState.current_world.get_player_by_peer(peer_id)
 		
 		if player_passanger:
 			if player_passanger == p:
-				set_passanger.rpc(-1, Vector3.ZERO)
+				set_passanger.rpc(-1)
 			return
 			
 		if p.vehicle_object:
 			if p.vehicle_object == self and player_driver == p:
-				set_driver.rpc(-1, Vector3.ZERO)
-				set_passanger.rpc(peer_id, passanger_seat_1.position)
+				set_driver.rpc(-1)
+				set_passanger.rpc(peer_id)
 		else:
-			set_passanger.rpc(peer_id, passanger_seat_1.position)
+			set_passanger.rpc(peer_id)
 
 @rpc("any_peer", "call_local")
 func exit_vehicle():
 	if multiplayer.is_server():
 		var peer_id = multiplayer.get_remote_sender_id()
 		if player_passanger and player_passanger.player_peer_id == peer_id:
-			set_passanger.rpc(-1, Vector3.ZERO)
+			set_passanger.rpc(-1)
 		if player_driver and player_driver.player_peer_id == peer_id:
-			set_driver.rpc(-1, Vector3.ZERO)
+			set_driver.rpc(-1)
 			
 @rpc("any_peer", "call_local")
 func drive():
@@ -242,40 +242,40 @@ func drive():
 		
 		if player_driver:
 			if player_driver == p:
-				set_driver.rpc(-1, Vector3.ZERO)
+				set_driver.rpc(-1)
 			return
 			
 		if p.vehicle_object:
 			if p.vehicle_object == self and player_passanger == p:
-				set_passanger.rpc(-1, Vector3.ZERO)
-				set_driver.rpc(peer_id, driver_seat_1.position)
+				set_passanger.rpc(-1)
+				set_driver.rpc(peer_id)
 		else:
-			set_driver.rpc(peer_id, driver_seat_1.position)
+			set_driver.rpc(peer_id)
 
 @rpc("authority", "call_local")
-func set_passanger(peer_id : int, offset : Vector3):
+func set_passanger(peer_id : int):
 	if player_passanger:
-		player_passanger.set_vehicle(null, Vector3.ZERO, false)
+		player_passanger.set_vehicle(null, Transform3D.IDENTITY, false)
 		remove_collision_exception_with(player_passanger)
 		player_passanger = null
 		
 	if peer_id > 0:
 		var p = GameState.current_world.get_player_by_peer(peer_id)
 		if p:
-			p.set_vehicle(self, offset, false)
+			p.set_vehicle(self, passanger_seat_1.transform, false)
 			player_passanger = p
 			add_collision_exception_with(player_passanger)
 	
 @rpc("authority", "call_local")
-func set_driver(peer_id : int, offset : Vector3):
+func set_driver(peer_id : int):
 	if player_driver:
-		player_driver.set_vehicle(null, Vector3.ZERO, false)
+		player_driver.set_vehicle(null, Transform3D.IDENTITY, false)
 		remove_collision_exception_with(player_driver)
 		player_driver = null
 		
 	if peer_id > 0:
 		var p = GameState.current_world.get_player_by_peer(peer_id)
-		p.set_vehicle(self, offset, true)
+		p.set_vehicle(self, driver_seat_1.transform, true)
 		player_driver = p
 		add_collision_exception_with(player_driver)
 

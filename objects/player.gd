@@ -1,10 +1,10 @@
 extends CharacterBody3D
 class_name Player
 
-@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer1
+@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
 @onready var mouse_state_indicator: MouseStateIndicator = $MouseStateIndicator
-@onready var player_input: PlayerInput = $PlayerInput
-@onready var player_vehicle_input: PlayerVehicleInput = $PlayerVehicleInput
+@onready var player_input: PlayerInputMovement = $PlayerInputMovement
+@onready var player_input_vehicle: PlayerInputVehicle = $PlayerVehicleInput
 @onready var camera: Camera3D = $CameraPivot/Camera3D
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var ray_cast_down: RayCast3D = $RayCastDown
@@ -26,7 +26,6 @@ class_name Player
 @export var player_peer_id := 1
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var current_speed = 0.0
 var acceleration = 2.0
 var walk_speed = 6.0
 var run_speed = 10.0
@@ -36,16 +35,22 @@ var max_velocity : float = 20.0
 var strength : float = 100
 var held_object = null
 var vehicle_object = null
-var vehicle_offset = null
+var vehicle_seat_transform = null
 var vehicle_driver = false
+var jumping = false
+var running = false
+var direction = Vector2.ZERO
 
 func set_held_object(object):
 	held_object = object
 
-func set_vehicle(vehicle, offset, can_drive):
+func set_vehicle(vehicle, seat_transform : Transform3D, can_drive : bool):
 	vehicle_object = vehicle
-	vehicle_offset = offset
+	vehicle_seat_transform = seat_transform
 	vehicle_driver = can_drive
+	if is_multiplayer_authority():
+		if seat_transform:
+			player_input.orientation.y = seat_transform.basis.get_euler().y
 	
 func _enter_tree() -> void:
 	set_multiplayer_authority(player_peer_id)
@@ -74,6 +79,11 @@ func _process(delta):
 		else:
 			crouching = player_input.crouching
 		
+		direction = player_input.direction
+		running = player_input.running
+		jumping = jumping or player_input.jumping
+		player_input.jumping = false
+		
 		camera.rotation.x = player_input.orientation.x
 		rotation.y = player_input.orientation.y
 	
@@ -81,18 +91,18 @@ func _process(delta):
 		visual_eye_right.rotation.x = player_input.orientation.x
 	
 		var cam_transform = camera.global_transform
-		held_object_position = cam_transform.origin + -cam_transform.basis.z * player_input.hold_distance
+		held_object_position = cam_transform.origin + -cam_transform.basis.z * player_input.object_distance
 		held_object_rotation = player_input.object_rotation
 	
 		if vehicle_object:
 			crouching = true
-			position = position.move_toward(vehicle_object.to_global(vehicle_offset), 50 * delta)
+			position = position.move_toward(vehicle_object.to_global(vehicle_seat_transform.origin), 50 * delta)
 			rotation.y = player_input.orientation.y + vehicle_object.rotation.y
 	else:
 		if vehicle_object:
 			crouching = true
-			position = position.move_toward(vehicle_object.to_global(vehicle_offset), 50 * delta)
-			rotation.y = move_toward(rotation.y, wrapf(rotation.y + vehicle_object.rotation.y, -PI, PI), delta)
+			position = position.move_toward(vehicle_object.to_global(vehicle_seat_transform.origin), 50 * delta)
+			#TODO: need to rotate relative to vehicle?
 			
 func _physics_process(delta):
 	
@@ -103,32 +113,28 @@ func _physics_process(delta):
 		
 	if vehicle_object:
 		return
-	else:
-		if is_multiplayer_authority():
-			if player_input.jumping and is_on_floor():
-				velocity.y = jump_force
-				player_input.jumping = false
+		
+	if is_multiplayer_authority():
+		if jumping and is_on_floor():
+			velocity.y = jump_force
+		jumping = false
 
-			var target_speed = run_speed if player_input.running else walk_speed
-			if crouching:
-				target_speed = crouch_speed
-				
-			current_speed = lerp(current_speed, target_speed, acceleration * delta)
-			
-			var direction = (transform.basis * Vector3(player_input.direction.x, 0, player_input.direction.y)).normalized()
-			if direction:
-				velocity.x = direction.x * current_speed
-				velocity.z = direction.z * current_speed
-			else:
-				if is_on_floor():
-					velocity.x = move_toward(velocity.x, 0, current_speed)
-					velocity.z = move_toward(velocity.z, 0, current_speed)
+		var movement_speed = crouch_speed if crouching else (run_speed if running else walk_speed)
+		var movement_direction = (transform.basis * Vector3(direction.x, 0, direction.y)).normalized()
+		
+		if movement_direction:
+			velocity.x = movement_direction.x * movement_speed
+			velocity.z = movement_direction.z * movement_speed
+		else:
+			if is_on_floor():
+				velocity.x = move_toward(velocity.x, 0, movement_speed)
+				velocity.z = move_toward(velocity.z, 0, movement_speed)
 
-			#NOTE: first try to reduce big push from rigidbodies
-			if velocity.length() > max_velocity:
-				velocity = velocity.normalized() * max_velocity
-			
-			move_and_slide()
+		#NOTE: first try to reduce big push from rigidbodies
+		if velocity.length() > max_velocity:
+			velocity = velocity.normalized() * max_velocity
+		
+		move_and_slide()
 
 func _change_collision():
 	if crouching:

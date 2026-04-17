@@ -13,12 +13,15 @@ _spawnable_scenes = PackedStringArray("uid://doue3vt7x21up")
 spawn_path = NodePath("../Levels")
 spawn_limit = 1
 
+[node name="LabelFPS" type="Label" parent="." unique_id=1578362403]
+offset_right = 125.0
+offset_bottom = 66.0
+
 [node name="MainMenu" parent="." unique_id=967372395 instance=ExtResource("2_jyhfs")]
 
-[node name="Options" parent="." unique_id=1566645939 instance=ExtResource("3_tbgi4")]
+[node name="MenuOptions" parent="." unique_id=1566645939 instance=ExtResource("3_tbgi4")]
 visible = false
 
 [node name="MenuStatistics" parent="." unique_id=1323699873 instance=ExtResource("4_jyhfs")]
-visible = false
 
 [node name="Levels" type="Node" parent="." unique_id=45069525]
