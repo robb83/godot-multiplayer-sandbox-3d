@@ -135,6 +135,7 @@ replication_config = SubResource("SceneReplicationConfig_6m5ka")
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1960231846]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 use_collision = true
+collision_layer = 3
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=709659963]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8929598, 0)

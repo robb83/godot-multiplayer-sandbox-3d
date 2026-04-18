@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://p558i1av2chn"]
+
+[ext_resource type="Texture2D" uid="uid://d3ac48cmkl2cy" path="res://assets/kenney_prototype_textures/PNG/Purple/texture_10.png" id="1_s64en"]
+[ext_resource type="Texture2D" uid="uid://bpnrngm7wcbmk" path="res://assets/kenney_prototype_textures/Vector/texture_09.svg" id="2_7hq1k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1wtjb"]
+albedo_texture = ExtResource("1_s64en")
+uv1_triplanar = true
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gh1tj"]
+albedo_texture = ExtResource("2_7hq1k")
+uv1_triplanar = true
+texture_filter = 5
+
+[node name="PlatformTunnelMultiple" type="Node3D" unique_id=646392970]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=309660894]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+use_collision = true
+collision_layer = 3
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1691928385]
+size = Vector3(4, 4, 10)
+material = SubResource("StandardMaterial3D_1wtjb")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1380529851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 0)
+operation = 2
+size = Vector3(1.5, 1.6, 10)
+material = SubResource("StandardMaterial3D_gh1tj")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=460853643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -1, 0)
+operation = 2
+size = Vector3(1.5, 1.6, 10)
+material = SubResource("StandardMaterial3D_gh1tj")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1664067835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.1, 0)
+operation = 2
+size = Vector3(1.5, 1.6, 10)
+material = SubResource("StandardMaterial3D_gh1tj")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=168354523]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.1, 0)
+operation = 2
+size = Vector3(1.5, 1.6, 10)
+material = SubResource("StandardMaterial3D_gh1tj")

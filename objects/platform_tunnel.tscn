@@ -11,6 +11,7 @@ texture_filter = 5
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=93348069]
 use_collision = true
+collision_layer = 3
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSGCombiner3D" unique_id=1876401882]
 use_collision = true

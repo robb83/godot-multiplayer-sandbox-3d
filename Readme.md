@@ -13,6 +13,7 @@ This project is not intended to be a polished product, but rather a sandbox for 
 * https://freesound.org/
 * https://www.youtube.com/watch?v=Z7-yDGMpKh0
 * https://github.com/godotengine/godot-demo-projects
+* https://github.com/Alenvei/Vault_Climb_Tutorial_Godot4.2
 
 ## Assets
 

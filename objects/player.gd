@@ -10,7 +10,6 @@ class_name Player
 @onready var ray_cast_down: RayCast3D = $RayCastDown
 @onready var ray_cast_forward: RayCast3D = $CameraPivot/Camera3D/RayCastForward
 @onready var ray_cast_interaction: RayCast3D = $CameraPivot/Camera3D/RayCastInteraction
-@onready var ray_cast_up: RayCast3D = $RayCastUp
 @onready var visuals: Node3D = $Visuals
 @onready var visual_eye_right: MeshInstance3D = $Visuals/VisualFace/VisualEyeRight
 @onready var visual_eye_left: MeshInstance3D = $Visuals/VisualFace/VisualEyeLeft
@@ -19,6 +18,10 @@ class_name Player
 @onready var visual_body_stand: MeshInstance3D = $Visuals/VisualBodyStand
 @onready var collision_crouch: CollisionShape3D = $CollisionCrouch
 @onready var collision_stand: CollisionShape3D = $CollisionStand
+@onready var shape_cast_stand: ShapeCast3D = $ShapeCastStand
+@onready var ray_cast_obstacle_detection: RayCast3D = $CameraPivot/Camera3D/RayCastObstacleDetection
+@onready var ray_cast_3d_landing_point: RayCast3D = $RayCast3DLandingPoint
+@onready var shape_cast_head: ShapeCast3D = $Visuals/VisualFace/ShapeCastHead
 
 @export var held_object_position : Vector3 = Vector3.ZERO
 @export var held_object_rotation : Vector2 = Vector2.ZERO
@@ -64,20 +67,27 @@ func _ready():
 		mouse_state_indicator.visible = true
 		ray_cast_down.visible = true
 		ray_cast_down.enabled = true
-		ray_cast_up.visible = true
-		ray_cast_up.enabled = true
 		ray_cast_interaction.visible = true
 		ray_cast_interaction.enabled = true
 		ray_cast_interaction.add_exception(self)
 		ray_cast_forward.visible = true
 		ray_cast_forward.enabled = true
+		ray_cast_obstacle_detection.visible = true
+		ray_cast_obstacle_detection.enabled = true
+		ray_cast_3d_landing_point.visible = true
+		ray_cast_3d_landing_point.enabled = true
+		shape_cast_stand.visible = true
+		shape_cast_head.add_exception(self)
+		shape_cast_head.visible = true
+		shape_cast_head.enabled = true
 
 func _process(_delta):
 	if is_multiplayer_authority():
 		if crouching and not player_input.crouching:
-			crouching = ray_cast_up.get_collider() != null
+			crouching = shape_cast_stand.is_colliding()
 		else:
 			crouching = player_input.crouching
+		shape_cast_stand.enabled = crouching
 		
 		direction = player_input.direction
 		running = player_input.running
@@ -117,8 +127,16 @@ func _physics_process(delta):
 		return
 		
 	if is_multiplayer_authority():
-		if jumping and is_on_floor():
-			velocity.y = jump_force
+		if jumping:
+			if ray_cast_obstacle_detection.is_colliding():
+				var collider = ray_cast_3d_landing_point.get_collider()
+				if collider and not shape_cast_head.is_colliding():
+					jumping = false
+					var collider_point = ray_cast_3d_landing_point.get_collision_point()
+					global_position = collider_point + Vector3(0, 1.1, 0)
+				
+			if jumping and is_on_floor():
+				velocity.y = jump_force
 		jumping = false
 
 		var movement_speed = crouch_speed if crouching else (run_speed if running else walk_speed)
