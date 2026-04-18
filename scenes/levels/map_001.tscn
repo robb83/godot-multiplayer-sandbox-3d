@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cbjv5wt05rhdq" path="res://assets/kenney_prototype_textures/Vector/texture_10.svg" id="1_gh5bl"]
 [ext_resource type="Script" uid="uid://cm7jddtkmc75k" path="res://scenes/levels/map_001.gd" id="1_p83bx"]
+[ext_resource type="Script" uid="uid://dgjmbcyaafigc" path="res://scripts/day_night_cycle.gd" id="2_pijkl"]
 [ext_resource type="PackedScene" uid="uid://beks86tbptkwp" path="res://objects/platform_translate.tscn" id="3_j0e1r"]
 [ext_resource type="PackedScene" uid="uid://mlbyns8u75d8" path="res://objects/platform_rotate.tscn" id="5_5yqef"]
 [ext_resource type="PackedScene" uid="uid://c0vkbc3tby3wp" path="res://objects/pickable_01.tscn" id="5_euqmx"]
@@ -15,11 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://bm5nwxv6k38v2" path="res://objects/pickable_03.tscn" id="9_y8wi5"]
 [ext_resource type="PackedScene" uid="uid://di8boooqu3i71" path="res://objects/pickable_04.tscn" id="10_fau81"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rjccc"]
-properties/0/path = NodePath(".:time_of_day")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p83bx"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -32,6 +28,11 @@ background_mode = 2
 sky = SubResource("Sky_uftd1")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rjccc"]
+properties/0/path = NodePath("DayNightCycle:time_of_day")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_fau81"]
 
@@ -54,9 +55,6 @@ albedo_color = Color(1, 0.3647059, 0.29411766, 1)
 [node name="Map001" type="Node3D" unique_id=114530484]
 script = ExtResource("1_p83bx")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=57441008]
-replication_config = SubResource("SceneReplicationConfig_rjccc")
-
 [node name="MultiplayerSpawnerPlayers" type="MultiplayerSpawner" parent="." unique_id=1414745027]
 spawn_path = NodePath("../Players")
 
@@ -70,6 +68,15 @@ environment = SubResource("Environment_m58ms")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=895284413]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
+
+[node name="DayNightCycle" type="Node" parent="." unique_id=368378630 node_paths=PackedStringArray("directional_light_3d")]
+script = ExtResource("2_pijkl")
+directional_light_3d = NodePath("../DirectionalLight3D")
+metadata/_custom_type_script = "uid://dgjmbcyaafigc"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="DayNightCycle" unique_id=57441008]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_rjccc")
 
 [node name="StaticObjects" type="Node3D" parent="." unique_id=1871595820]
 
