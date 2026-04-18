@@ -167,9 +167,8 @@ collision_mask = 2
 
 [node name="RayCastForward" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1565236757]
 enabled = false
-target_position = Vector3(0, 0, -1.5)
+target_position = Vector3(0, 0, -1)
 collide_with_areas = true
-collide_with_bodies = false
 
 [node name="RayCastInteraction" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1116504037]
 enabled = false

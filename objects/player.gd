@@ -29,20 +29,22 @@ class_name Player
 @export var player_peer_id := 1
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var acceleration = 2.0
-var walk_speed = 6.0
-var run_speed = 10.0
-var crouch_speed = 3.0
-var jump_force = 4.0
+var acceleration : float = 2.0
+var walk_speed : float = 6.0
+var run_speed : float = 10.0
+var crouch_speed : float = 3.0
+var jump_force : float = 4.0
 var max_velocity : float = 20.0
 var strength : float = 100
 var held_object = null
 var vehicle_object = null
 var vehicle_seat_transform = null
 var vehicle_driver = false
-var jumping = false
-var running = false
-var direction = Vector2.ZERO
+var jumping : bool = false
+var running : bool = false
+var direction : Vector2 = Vector2.ZERO
+var is_on_ladder : bool = false
+var ladder_speed : float = 1.0
 
 func set_held_object(object):
 	held_object = object
@@ -127,6 +129,10 @@ func _physics_process(delta):
 		return
 		
 	if is_multiplayer_authority():
+		if is_on_ladder:
+			_handle_ladder(delta)
+			return
+			
 		if jumping:
 			if ray_cast_obstacle_detection.is_colliding():
 				var collider = ray_cast_3d_landing_point.get_collider()
@@ -155,7 +161,39 @@ func _physics_process(delta):
 			velocity = velocity.normalized() * max_velocity
 		
 		move_and_slide()
+		
+		_ladder_check()
 
+func _handle_ladder(delta):
+	if is_on_floor() and direction.y > 0:
+		is_on_ladder = false
+		return
+		
+	velocity = Vector3(direction.x * ladder_speed * 0.5, -direction.y * ladder_speed, 0.0)
+	
+	if jumping:
+		is_on_ladder = false
+		velocity.y = jump_force
+		move_and_slide()
+		return
+	jumping = false
+	
+	move_and_slide()
+	
+	is_on_ladder = _ladder_touching()
+
+func _ladder_touching():
+	var collider = ray_cast_forward.get_collider()
+	return collider and collider.is_in_group("ladder")
+	
+func _ladder_check():
+	var collider = ray_cast_forward.get_collider()
+	if collider and collider.is_in_group("ladder") and direction.y < 0:
+		var forward = -camera.global_transform.basis.z
+		var ladder_forward = -collider.global_transform.basis.z
+		if forward.dot(ladder_forward) > 0.7:
+			is_on_ladder = true
+		
 func _change_collision():
 	if crouching:
 		collision_stand.disabled = true

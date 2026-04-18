@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cod7e0gfcx0k5" path="res://objects/platform_tunnel.tscn" id="6_kkhy5"]
 [ext_resource type="Script" uid="uid://dg2j7sehqvg3l" path="res://scripts/platform_ladder.gd" id="7_fnru0"]
 [ext_resource type="PackedScene" uid="uid://p558i1av2chn" path="res://objects/platform_tunner_multiple.tscn" id="8_xplyj"]
+[ext_resource type="PackedScene" uid="uid://b6rqe84umrjio" path="res://objects/platform_tower.tscn" id="9_8lbwq"]
 [ext_resource type="PackedScene" uid="uid://crclfbh4hxcc5" path="res://objects/vehicle_car.tscn" id="9_rjccc"]
 [ext_resource type="PackedScene" uid="uid://bm5nwxv6k38v2" path="res://objects/pickable_03.tscn" id="9_y8wi5"]
 [ext_resource type="PackedScene" uid="uid://di8boooqu3i71" path="res://objects/pickable_04.tscn" id="10_fau81"]
@@ -112,6 +113,9 @@ metadata/_custom_type_script = "uid://dg2j7sehqvg3l"
 
 [node name="PlatformTunnelMultiple" parent="StaticObjects" unique_id=646392970 instance=ExtResource("8_xplyj")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 23, 0, 17)
+
+[node name="PlatformTower" parent="StaticObjects" unique_id=827901583 instance=ExtResource("9_8lbwq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.53197, 0, 0)
 
 [node name="DynamicObjects" type="Node3D" parent="." unique_id=749812872]
 
