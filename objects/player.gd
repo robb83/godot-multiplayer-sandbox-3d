@@ -72,7 +72,7 @@ func _ready():
 		ray_cast_forward.visible = true
 		ray_cast_forward.enabled = true
 
-func _process(delta):
+func _process(_delta):
 	if is_multiplayer_authority():
 		if crouching and not player_input.crouching:
 			crouching = ray_cast_up.get_collider() != null
@@ -96,12 +96,14 @@ func _process(delta):
 	
 		if vehicle_object:
 			crouching = true
-			position = position.move_toward(vehicle_object.to_global(vehicle_seat_transform.origin), 50 * delta)
+			var target_position = vehicle_object.to_global(vehicle_seat_transform.origin)
+			position = target_position
 			rotation.y = player_input.orientation.y + vehicle_object.rotation.y
 	else:
 		if vehicle_object:
 			crouching = true
-			position = position.move_toward(vehicle_object.to_global(vehicle_seat_transform.origin), 50 * delta)
+			var target_position = vehicle_object.to_global(vehicle_seat_transform.origin)
+			position = target_position
 			#TODO: need to rotate relative to vehicle?
 			
 func _physics_process(delta):

@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cj74uk6yjvcay" path="res://objects/static_garage.tscn" id="5_u1jbu"]
 [ext_resource type="PackedScene" uid="uid://b084jjum1hopk" path="res://objects/pickable_02.tscn" id="6_euqmx"]
 [ext_resource type="PackedScene" uid="uid://cod7e0gfcx0k5" path="res://objects/platform_tunnel.tscn" id="6_kkhy5"]
+[ext_resource type="Script" uid="uid://dg2j7sehqvg3l" path="res://scripts/platform_ladder.gd" id="7_fnru0"]
 [ext_resource type="PackedScene" uid="uid://crclfbh4hxcc5" path="res://objects/vehicle_car.tscn" id="9_rjccc"]
 [ext_resource type="PackedScene" uid="uid://bm5nwxv6k38v2" path="res://objects/pickable_03.tscn" id="9_y8wi5"]
 [ext_resource type="PackedScene" uid="uid://di8boooqu3i71" path="res://objects/pickable_04.tscn" id="10_fau81"]
@@ -45,6 +46,9 @@ uv1_triplanar = true
 uv1_world_triplanar = true
 texture_filter = 5
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fnru0"]
+albedo_color = Color(1, 0.3647059, 0.29411766, 1)
+
 [node name="Map001" type="Node3D" unique_id=114530484]
 script = ExtResource("1_p83bx")
 
@@ -68,7 +72,7 @@ shadow_enabled = true
 [node name="StaticObjects" type="Node3D" parent="." unique_id=1871595820]
 
 [node name="WorldBoundary" type="StaticBody3D" parent="StaticObjects" unique_id=1280201624]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticObjects/WorldBoundary" unique_id=1628603585]
 shape = SubResource("WorldBoundaryShape3D_fau81")
@@ -79,7 +83,7 @@ shape = SubResource("WorldBoundaryShape3D_fau81")
 shape = SubResource("BoxShape3D_p83bx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObjects/Floor" unique_id=168930226]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060582638, -0.01902628, 0.20469809)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04177046, 0.022931576, 0.19079733)
 mesh = SubResource("BoxMesh_uftd1")
 surface_material_override/0 = SubResource("StandardMaterial3D_m58ms")
 
@@ -94,6 +98,16 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 24.0
 
 [node name="PlatformTunnel" parent="StaticObjects" unique_id=469594147 instance=ExtResource("6_kkhy5")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17, 0, 7)
+
+[node name="PlatformLadder" type="Node3D" parent="StaticObjects" unique_id=1007287459]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 21, 0, -3.465073)
+script = ExtResource("7_fnru0")
+ladder_height = 4.5
+ladder_width = 0.6
+rung_spacing = 0.5
+rail_thickness = 0.1
+material = SubResource("StandardMaterial3D_fnru0")
+metadata/_custom_type_script = "uid://dg2j7sehqvg3l"
 
 [node name="DynamicObjects" type="Node3D" parent="." unique_id=749812872]
 
