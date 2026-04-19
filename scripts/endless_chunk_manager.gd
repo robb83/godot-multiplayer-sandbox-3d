@@ -39,11 +39,14 @@ func update_chunks():
 	for key in spawned_chunks.keys():
 		if key < current_chunk - 2:
 			if multiplayer.is_server() and spawned_chunks[key].players.size() > 0:
-				return
-			spawned_chunks[key].queue_free()
-			spawned_chunks.erase(key)
-			chunk_removed.rpc(key)
-
+				continue
+			_remove_chunk(key)
+			
+func _remove_chunk(index):
+	spawned_chunks[index].queue_free()
+	spawned_chunks.erase(index)
+	chunk_removed.rpc(index)
+			
 func _spawn_chunk(index):
 	var chunk = start_scene.instantiate() if index == 0 else chunk_scene.instantiate()
 	chunk.name = str(index)
@@ -60,12 +63,16 @@ func chunk_loaded(chunk):
 		_spawn_chunk(chunk)
 		
 	if spawned_chunks.has(chunk):
-		spawned_chunks[chunk].set_synchronizers_visibility_for(multiplayer.get_remote_sender_id(), true)
+		spawned_chunks[chunk].set_synchronizers_visibility_for(peer_id, true)
 	
 	
 @rpc("any_peer")
 func chunk_removed(chunk):
 	var peer_id = multiplayer.get_remote_sender_id()
 	print("[%s] chunk_removed: %s, %s" % [multiplayer.get_unique_id(), chunk, peer_id])
+	
 	if spawned_chunks.has(chunk):
-		spawned_chunks[chunk].set_synchronizers_visibility_for(multiplayer.get_remote_sender_id(), false)
+		spawned_chunks[chunk].set_synchronizers_visibility_for(peer_id, false)
+		print(spawned_chunks[chunk].players.size())
+		if multiplayer.is_server() and spawned_chunks[chunk].players.size() == 0:
+			_remove_chunk(chunk)

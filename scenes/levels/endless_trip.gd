@@ -1,7 +1,5 @@
 extends Node3D
 
-# test: what happening for the remote player when stand on unloaded chunk
-
 @onready var chunk_manager: EndlessChunkManager = $ChunkManager
 @onready var players: Node3D = $ChunkManager/Players
 

@@ -9,9 +9,11 @@ func _ready():
 		set_synchronizers_visibility_for(1, true)
 
 func set_synchronizers_visibility_for(peer_id : int, value: bool) -> void:
-	if not visible and players.has(peer_id):
-		players.erase(peer_id)
-	elif visible:
+	if not value:
+		if players.has(peer_id):
+			players.erase(peer_id)
+		print(players)
+	elif value:
 		players[peer_id] = true
 		
 	_set_synchronizers_visibility_for(self, peer_id, value)
