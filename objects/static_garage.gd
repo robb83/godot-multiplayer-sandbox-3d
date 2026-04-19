@@ -8,15 +8,18 @@ var state_open : bool = false
 
 func _ready():
 	animatable_body_3d.set_meta('interactable', self)
-	
-func _update_state():
-	if animation_player.is_playing():
-		return
-	state_open = not state_open
+
+func set_state(open : bool):
+	state_open = open
 	if state_open:
 		animation_player.current_animation = "door_open"
 	else:
 		animation_player.current_animation = "door_close"
+		
+func _update_state():
+	if animation_player.is_playing():
+		return
+	set_state(not state_open)
 
 @rpc("any_peer", "call_local")
 func interact():

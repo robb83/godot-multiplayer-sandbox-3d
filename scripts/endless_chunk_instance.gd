@@ -2,17 +2,30 @@ extends Node3D
 class_name EndlessChunkInstance
 
 var players = {}
+var version : int = 1
+var generated : bool = false
+var manager : EndlessChunkManager = null
 
 func _ready():
+	generated = true
 	set_synchronizers_visibility_safe(false)
 	if not is_multiplayer_authority():
 		set_synchronizers_visibility_for(1, true)
 
+func get_chunk_state() -> Dictionary:
+	return { "version": version, "generated": generated }
+
+func set_chunk_state(state : Dictionary):
+	if state:
+		generated = state.generated
+		
+func generate():
+	generated = true
+		
 func set_synchronizers_visibility_for(peer_id : int, value: bool) -> void:
 	if not value:
 		if players.has(peer_id):
 			players.erase(peer_id)
-		print(players)
 	elif value:
 		players[peer_id] = true
 		

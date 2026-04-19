@@ -30,6 +30,9 @@ script = ExtResource("1_2pucn")
 [node name="MultiplayerSpawnerPlayers" type="MultiplayerSpawner" parent="." unique_id=1489681149]
 spawn_path = NodePath("../ChunkManager/Players")
 
+[node name="MultiplayerSpawnerObjects" type="MultiplayerSpawner" parent="." unique_id=796086060]
+spawn_path = NodePath("../ChunkManager/Objects")
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=41324744]
 environment = SubResource("Environment_by6k3")
 
@@ -56,3 +59,5 @@ metadata/_custom_type_script = "uid://b6k1du7261ne8"
 [node name="Players" type="Node3D" parent="ChunkManager" unique_id=1471487036]
 
 [node name="Chunks" type="Node3D" parent="ChunkManager" unique_id=1853831788]
+
+[node name="Objects" type="Node3D" parent="ChunkManager" unique_id=2094958836]

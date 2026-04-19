@@ -14,7 +14,7 @@ albedo_texture = ExtResource("2_ur7ch")
 uv1_triplanar = true
 texture_filter = 5
 
-[node name="EndlessTripChunk2" type="Node3D" unique_id=77804603]
+[node name="EndlessTripChunk" type="Node3D" unique_id=77804603]
 script = ExtResource("1_hlu2n")
 metadata/_custom_type_script = "uid://dsn5hxvdur310"
 

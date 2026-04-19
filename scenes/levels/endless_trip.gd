@@ -10,7 +10,6 @@ const SPAWN_POINT := Vector3(0, 0.5, 7)
 const SPAWN_RANDOM := 2.0
 
 func _ready():
-	print("_READY")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	$MultiplayerSpawnerPlayers.spawn_function = _handle_player_spawn
 	if multiplayer.is_server():
