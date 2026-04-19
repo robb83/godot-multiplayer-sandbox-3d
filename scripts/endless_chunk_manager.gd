@@ -55,8 +55,13 @@ func _spawn_chunk(index):
 func chunk_loaded(chunk):
 	var peer_id = multiplayer.get_remote_sender_id()
 	print("[%s] chunk_loaded: %s, %s" % [multiplayer.get_unique_id(), chunk, peer_id])
+	
+	if multiplayer.is_server() and not spawned_chunks.has(chunk):
+		_spawn_chunk(chunk)
+		
 	if spawned_chunks.has(chunk):
 		spawned_chunks[chunk].set_synchronizers_visibility_for(multiplayer.get_remote_sender_id(), true)
+	
 	
 @rpc("any_peer")
 func chunk_removed(chunk):
