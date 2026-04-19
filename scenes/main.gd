@@ -1,8 +1,6 @@
 extends Node
 
-const MAP_001 = preload("res://scenes/levels/map_001.tscn")
-
-@onready var levels: Node = $Levels
+@onready var worlds: Node = $Worlds
 @onready var menu_options: Control = $MenuOptions
 @onready var main_menu: Control = $MainMenu
 
@@ -32,12 +30,16 @@ func _on_network_state_changed(state):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		if GameState.current_world:
 			#Clear GameState.current_world
-			levels.remove_child(GameState.current_world)
+			worlds.remove_child(GameState.current_world)
 	elif state == Network.NetworkState.LISTENING:
 		current_peer_id = multiplayer.get_unique_id()
 		main_menu.hide()
 		#Set GameState.current_world
-		levels.add_child(MAP_001.instantiate())
+		if GameState.selected_world:
+			var world_scene = load(GameState.selected_world.path)
+			worlds.add_child(world_scene.instantiate())
+		else:
+			Network.network_disconnect()
 	elif state == Network.NetworkState.CONNECTED:
 		current_peer_id = multiplayer.get_unique_id()
 		main_menu.hide()

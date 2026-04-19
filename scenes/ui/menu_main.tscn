@@ -27,6 +27,12 @@ layout_mode = 2
 layout_mode = 2
 text = "Network Sandbox 3D Game Project"
 
+[node name="OptionWorlds" type="OptionButton" parent="CenterContainer/VBoxContainer" unique_id=1196512186]
+layout_mode = 2
+
+[node name="HSeparator1" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=1498201502]
+layout_mode = 2
+
 [node name="EditServerPort1" type="LineEdit" parent="CenterContainer/VBoxContainer" unique_id=1576294122]
 layout_mode = 2
 text = "31807"
@@ -37,7 +43,7 @@ layout_mode = 2
 text = "Create Server
 "
 
-[node name="HSeparator1" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=1498201502]
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=2049394572]
 layout_mode = 2
 
 [node name="EditServerIP2" type="LineEdit" parent="CenterContainer/VBoxContainer" unique_id=2128495966]

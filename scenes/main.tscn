@@ -9,8 +9,8 @@
 script = ExtResource("1_sugp2")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=496834420]
-_spawnable_scenes = PackedStringArray("uid://doue3vt7x21up")
-spawn_path = NodePath("../Levels")
+_spawnable_scenes = PackedStringArray("uid://doue3vt7x21up", "uid://b2yv3te40muni")
+spawn_path = NodePath("../Worlds")
 spawn_limit = 1
 
 [node name="LabelFPS" type="Label" parent="." unique_id=1578362403]
@@ -24,4 +24,4 @@ visible = false
 
 [node name="MenuStatistics" parent="." unique_id=1323699873 instance=ExtResource("4_jyhfs")]
 
-[node name="Levels" type="Node" parent="." unique_id=45069525]
+[node name="Worlds" type="Node" parent="." unique_id=45069525]
