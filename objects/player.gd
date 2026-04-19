@@ -164,7 +164,7 @@ func _physics_process(delta):
 		
 		_ladder_check()
 
-func _handle_ladder(delta):
+func _handle_ladder(_delta):
 	if is_on_floor() and direction.y > 0:
 		is_on_ladder = false
 		return

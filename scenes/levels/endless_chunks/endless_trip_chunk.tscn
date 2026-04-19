@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://c20jwf7rv8lba"]
+
+[ext_resource type="Script" uid="uid://dsn5hxvdur310" path="res://scripts/endless_chunk_instance.gd" id="1_hlu2n"]
+[ext_resource type="Texture2D" uid="uid://bpnrngm7wcbmk" path="res://assets/kenney_prototype_textures/Vector/texture_09.svg" id="2_ur7ch"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8iarp"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8vlvx"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tdo0a"]
+albedo_texture = ExtResource("2_ur7ch")
+uv1_triplanar = true
+texture_filter = 5
+
+[node name="EndlessTripChunk2" type="Node3D" unique_id=77804603]
+script = ExtResource("1_hlu2n")
+metadata/_custom_type_script = "uid://dsn5hxvdur310"
+
+[node name="StaticObjects" type="Node3D" parent="." unique_id=808675030]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="StaticObjects" unique_id=1012331213]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticObjects/StaticBody3D" unique_id=738384667]
+shape = SubResource("BoxShape3D_8iarp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObjects/StaticBody3D" unique_id=1592227997]
+mesh = SubResource("BoxMesh_8vlvx")
+surface_material_override/0 = SubResource("StandardMaterial3D_tdo0a")
+
+[node name="DynamicObjects" type="Node3D" parent="." unique_id=1792608229]

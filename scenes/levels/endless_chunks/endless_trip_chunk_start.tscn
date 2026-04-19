@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dl4nxm4kyp1t"]
+
+[ext_resource type="Script" uid="uid://dsn5hxvdur310" path="res://scripts/endless_chunk_instance.gd" id="1_g5v64"]
+[ext_resource type="Texture2D" uid="uid://bpnrngm7wcbmk" path="res://assets/kenney_prototype_textures/Vector/texture_09.svg" id="1_ix2sv"]
+[ext_resource type="PackedScene" uid="uid://cj74uk6yjvcay" path="res://objects/static_garage.tscn" id="2_g5v64"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8iarp"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8vlvx"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tdo0a"]
+albedo_texture = ExtResource("1_ix2sv")
+uv1_triplanar = true
+texture_filter = 5
+
+[node name="EndlessTripChunk" type="Node3D" unique_id=501449724]
+script = ExtResource("1_g5v64")
+metadata/_custom_type_script = "uid://dsn5hxvdur310"
+
+[node name="StaticObjects" type="Node3D" parent="." unique_id=808675030]
+
+[node name="Platform" type="StaticBody3D" parent="StaticObjects" unique_id=1012331213]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticObjects/Platform" unique_id=738384667]
+shape = SubResource("BoxShape3D_8iarp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObjects/Platform" unique_id=1592227997]
+mesh = SubResource("BoxMesh_8vlvx")
+surface_material_override/0 = SubResource("StandardMaterial3D_tdo0a")
+
+[node name="Garage" parent="StaticObjects" unique_id=1434474583 instance=ExtResource("2_g5v64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="DynamicObjects" type="Node3D" parent="." unique_id=1792608229]

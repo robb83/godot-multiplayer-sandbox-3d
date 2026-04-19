@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://b2yv3te40muni"]
+
+[ext_resource type="Script" uid="uid://bsyxh02gqd0eb" path="res://scenes/levels/endless_trip.gd" id="1_2pucn"]
+[ext_resource type="Script" uid="uid://dgjmbcyaafigc" path="res://scripts/day_night_cycle.gd" id="2_by6k3"]
+[ext_resource type="Script" uid="uid://b6k1du7261ne8" path="res://scripts/endless_chunk_manager.gd" id="3_by6k3"]
+[ext_resource type="PackedScene" uid="uid://c20jwf7rv8lba" path="res://scenes/levels/endless_chunks/endless_trip_chunk.tscn" id="4_1alcj"]
+[ext_resource type="PackedScene" uid="uid://dl4nxm4kyp1t" path="res://scenes/levels/endless_chunks/endless_trip_chunk_start.tscn" id="5_1alcj"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vfhxo"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_eln3k"]
+sky_material = SubResource("ProceduralSkyMaterial_vfhxo")
+
+[sub_resource type="Environment" id="Environment_by6k3"]
+background_mode = 2
+sky = SubResource("Sky_eln3k")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2pucn"]
+properties/0/path = NodePath("DayNightCycle:time_of_day")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="EndlessTrip" type="Node3D" unique_id=1451109701]
+script = ExtResource("1_2pucn")
+
+[node name="MultiplayerSpawnerPlayers" type="MultiplayerSpawner" parent="." unique_id=1489681149]
+spawn_path = NodePath("../ChunkManager/Players")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=41324744]
+environment = SubResource("Environment_by6k3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1924739032]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="DayNightCycle" type="Node" parent="." unique_id=1290004752 node_paths=PackedStringArray("directional_light_3d")]
+script = ExtResource("2_by6k3")
+directional_light_3d = NodePath("../DirectionalLight3D")
+metadata/_custom_type_script = "uid://dgjmbcyaafigc"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="DayNightCycle" unique_id=498714535]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_2pucn")
+
+[node name="ChunkManager" type="Node3D" parent="." unique_id=322459860]
+script = ExtResource("3_by6k3")
+chunk_scene = ExtResource("4_1alcj")
+start_scene = ExtResource("5_1alcj")
+chunk_length = 20.0
+metadata/_custom_type_script = "uid://b6k1du7261ne8"
+
+[node name="Players" type="Node3D" parent="ChunkManager" unique_id=1471487036]
+
+[node name="Chunks" type="Node3D" parent="ChunkManager" unique_id=1853831788]
