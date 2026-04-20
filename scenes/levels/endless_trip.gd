@@ -4,10 +4,9 @@ extends Node3D
 @onready var players: Node3D = $ChunkManager/Players
 
 @onready var player_template = preload("res://objects/player.tscn")
-@onready var pickable_01 = preload("res://objects/pickable_03.tscn")
 
-const SPAWN_POINT := Vector3(0, 0.5, 7)
-const SPAWN_RANDOM := 2.0
+const SPAWN_POINT := Vector3(0, 0.5, 20)
+const SPAWN_RANDOM := 3.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -55,6 +54,4 @@ func get_client_player():
 @rpc("any_peer", "call_local")
 func spawn_object(pos):
 	if is_multiplayer_authority():
-		var object = pickable_01.instantiate()
-		object.position = pos
-		add_child(object, true)
+		chunk_manager.spawn_dynamic_object("res://objects/pickable_03.tscn", pos, Vector3.ZERO)

@@ -106,13 +106,13 @@ func _process(_delta):
 		held_object_position = cam_transform.origin + -cam_transform.basis.z * player_input.object_distance
 		held_object_rotation = player_input.object_rotation
 	
-		if vehicle_object:
+		if vehicle_object and is_instance_valid(vehicle_object) and vehicle_object.is_inside_tree():
 			crouching = true
 			var target_position = vehicle_object.to_global(vehicle_seat_transform.origin)
 			position = target_position
 			rotation.y = player_input.orientation.y + vehicle_object.rotation.y
 	else:
-		if vehicle_object:
+		if vehicle_object and is_instance_valid(vehicle_object) and vehicle_object.is_inside_tree():
 			crouching = true
 			var target_position = vehicle_object.to_global(vehicle_seat_transform.origin)
 			position = target_position
