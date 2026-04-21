@@ -7,13 +7,13 @@ class_name PlayerInputMovement
 @export var crouching := false
 @export var direction := Vector2()
 @export var orientation : Vector2 = Vector2.ZERO
-@export var object_distance : float = 8.0
+@export var object_distance : float = 3.0
 @export var object_rotation : Vector2 = Vector2.ZERO
 
 var mouse_sensitivity : float = 0.01
 var pitch_min : float = deg_to_rad(-70)
 var pitch_max : float = deg_to_rad(70)
-var object_min_distance : float = 1.5
+var object_min_distance : float = 0.7
 var object_max_distance : float = 8.0
 var scroll_speed : float = 0.5
 var rotating_object : bool = false
@@ -108,7 +108,7 @@ func _handle_primary_interaction():
 		elif collider.is_in_group("pickable"):
 			var controller = collider.get_meta("pickable")
 			object_rotation = Vector2.ZERO
-			object_distance = clamp(collider.global_position.distance_to(player.global_position), object_min_distance, object_max_distance)
+			object_distance = clamp(collision_point.distance_to(player.global_position) - 0.3, object_min_distance, object_max_distance)
 			controller.pickup.rpc_id(1, controller.target.to_local(collision_point))
 
 func _handle_interaction_visual_feedback():
