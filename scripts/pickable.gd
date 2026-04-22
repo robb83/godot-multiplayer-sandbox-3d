@@ -26,17 +26,17 @@ func _physics_process(_delta: float) -> void:
 func _held_object_check():
 	if player and (multiplayer.is_server() or player.player_peer_id == multiplayer.get_unique_id()):
 		if not is_instance_valid(player):
-			drop.rpc_id(1)
+			drop.rpc_id(G.SERVER_PEER_ID)
 			return
 		
 		if player.global_position.distance_to(target.global_position) >= max_distance:
-			drop.rpc_id(1)
+			drop.rpc_id(G.SERVER_PEER_ID)
 			return
 			
 		var current_pos = target.to_global(grab_point)
 		var linear_movement = player.held_object_position - current_pos
 		if linear_movement.length() > too_weak:
-			drop.rpc_id(1)
+			drop.rpc_id(G.SERVER_PEER_ID)
 			return
 			
 func _held_object_move():

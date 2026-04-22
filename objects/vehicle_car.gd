@@ -1,14 +1,5 @@
 extends VehicleBody3D
 
-
-# Engine sound by Dmitry_mansurev64 (Freesound)
-# Licensed under CC BY 0.0
-# https://freesound.org/people/Dmitry_mansurev64/sounds/748027/
-
-# Blinker sound by dersuperanton (Freesound)
-# Licensed under CC BY 4.0
-# https://freesound.org/people/dersuperanton/sounds/434819/
-
 @onready var driver_seat_1: Node3D = $Seats/DriverSeat1
 @onready var passanger_seat_1: Node3D = $Seats/PassangerSeat1
 @onready var engine_sound: AudioStreamPlayer3D = $EngineSound

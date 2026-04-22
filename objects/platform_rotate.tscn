@@ -75,6 +75,7 @@ script = ExtResource("1_2e1h5")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1947422259]
 replication_config = SubResource("SceneReplicationConfig_xvfoy")
+public_visibility = false
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=448351903]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)

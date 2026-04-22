@@ -33,6 +33,7 @@ angular_damp = 5.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1043789829]
 replication_config = SubResource("SceneReplicationConfig_22nls")
+public_visibility = false
 
 [node name="Pickable" type="Node" parent="." unique_id=1969639579 node_paths=PackedStringArray("target")]
 script = ExtResource("1_coa6w")

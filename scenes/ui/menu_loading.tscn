@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dgcnhuxgal8e1"]
+
+[node name="MenuLoading" type="Control" unique_id=1364446812]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1894728483]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -57.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1104200557]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1705628857]
+layout_mode = 2
+text = "Please wait..."
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=1789963286]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+value = 50.0
+show_percentage = false
+indeterminate = true
+editor_preview_indeterminate = false

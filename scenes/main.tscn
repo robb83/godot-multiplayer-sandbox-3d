@@ -4,14 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://dbnu0j6f1tlf4" path="res://scenes/ui/menu_main.tscn" id="2_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://bxisdy1amst25" path="res://scenes/ui/menu_options.tscn" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://c8v1lobxmf0sx" path="res://scenes/ui/menu_statistics.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://dgcnhuxgal8e1" path="res://scenes/ui/menu_loading.tscn" id="5_tbgi4"]
 
 [node name="Main" type="Node" unique_id=1753394026]
 script = ExtResource("1_sugp2")
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=496834420]
-_spawnable_scenes = PackedStringArray("uid://doue3vt7x21up", "uid://b2yv3te40muni")
-spawn_path = NodePath("../Worlds")
-spawn_limit = 1
 
 [node name="LabelFPS" type="Label" parent="." unique_id=1578362403]
 offset_right = 125.0
@@ -23,5 +19,8 @@ offset_bottom = 66.0
 visible = false
 
 [node name="MenuStatistics" parent="." unique_id=1323699873 instance=ExtResource("4_jyhfs")]
+
+[node name="MenuLoading" parent="." unique_id=1364446812 instance=ExtResource("5_tbgi4")]
+visible = false
 
 [node name="Worlds" type="Node" parent="." unique_id=45069525]

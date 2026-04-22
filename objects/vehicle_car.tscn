@@ -90,6 +90,7 @@ script = ExtResource("1_7vf3j")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1270138943]
 replication_config = SubResource("SceneReplicationConfig_jossu")
+public_visibility = false
 
 [node name="Pickable" type="Node" parent="." unique_id=641065516 node_paths=PackedStringArray("target")]
 script = ExtResource("2_nocom")

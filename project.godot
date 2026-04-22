@@ -21,6 +21,7 @@ buses/default_bus_layout="uid://dxfujitpcled1"
 
 [autoload]
 
+G="*uid://vnw5tochiwdk"
 Network="*uid://yklydppi42yc"
 GameState="*uid://bc12yaejdew6t"
 AudioManager="*uid://cut4a5lqs0vad"

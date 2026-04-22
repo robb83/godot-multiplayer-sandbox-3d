@@ -57,11 +57,7 @@ func set_vehicle(vehicle, seat_transform : Transform3D, can_drive : bool):
 		if seat_transform:
 			player_input.orientation.y = seat_transform.basis.get_euler().y
 	
-func _enter_tree() -> void:
-	set_multiplayer_authority(player_peer_id)
-	
 func _ready():
-	
 	if is_multiplayer_authority():
 		visuals.visible = false
 		camera_pivot.visible = true

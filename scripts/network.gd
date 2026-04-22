@@ -5,8 +5,9 @@ extends Node
 enum NetworkState { NOT_CONNECTED, CONNECTING, CONNECTED , LISTENING }
 
 signal state_changed
-signal player_connected
-signal player_disconnected
+signal peer_connected
+signal peer_disconnected
+signal disconnected
 
 var current_id : int = -1
 var state : NetworkState = NetworkState.NOT_CONNECTED
@@ -14,13 +15,13 @@ var original_title = null
 
 func _ready():
 	multiplayer.server_relay = true
-	multiplayer.peer_connected.connect(_player_connected)
-	multiplayer.peer_disconnected.connect(_player_disconnected)
+	multiplayer.peer_connected.connect(_peer_connected)
+	multiplayer.peer_disconnected.connect(_peer_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	
-func network_host(port):	
+func network_host(port):
 	var peer = ENetMultiplayerPeer.new()
 	var err := peer.create_server(port, 4)
 	if err == OK:
@@ -46,19 +47,20 @@ func network_join(ip, port):
 	return err
 	
 func network_disconnect():
+	print("[%s] network_disconnect" % [current_id])
 	multiplayer.set_multiplayer_peer(null)
 	_set_state(NetworkState.NOT_CONNECTED)
 	
 func network_kick(peer_id):
 	multiplayer.get_multiplayer_peer().disconnect_peer(peer_id)
 
-func _player_connected(id: int) -> void:
+func _peer_connected(id: int) -> void:
 	print("[%s] _player_connected = %d" % [current_id, id])
-	player_connected.emit(id)
+	peer_connected.emit(id)
 
-func _player_disconnected(id: int) -> void:
+func _peer_disconnected(id: int) -> void:
 	print("[%s] _player_disconnected = %d" % [current_id, id])
-	player_disconnected.emit(id)
+	peer_disconnected.emit(id)
 
 func _on_connected_ok() -> void:
 	print("[%s] _on_connected_ok" % [current_id])
@@ -72,8 +74,9 @@ func _on_connected_fail():
 	
 func _on_server_disconnected():
 	print("[%s] _on_server_disconnected" % [current_id])
-	multiplayer.set_multiplayer_peer(null)
 	_set_state(NetworkState.NOT_CONNECTED)
+	disconnected.emit()
+	multiplayer.set_multiplayer_peer(null)
 
 func _set_state(s):
 	state = s

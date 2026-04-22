@@ -10,6 +10,7 @@ class_name EndlessChunkManager
 # TODO: Client has an error when receive RPC call from non-visible node
 # TODO: _update_objects batch
 # TODO: object view distance need to be less than chunk view distance
+# TODO: freeze object
 
 var chunk01 := preload("res://scenes/levels/endless_chunks/endless_trip_chunk.tscn")
 var chunk02 := preload("res://scenes/levels/endless_chunks/endless_trip_chunk_start.tscn")
@@ -37,7 +38,7 @@ func get_chunk_index(z_pos: float) -> int:
 
 func _ready():
 	local_peer_id = multiplayer.get_unique_id()
-	Network.player_disconnected.connect(_player_disconnected)
+	Network.peer_disconnected.connect(_peer_disconnected)
 	multiplayer_spawner_objects.spawn_function = _spawn_object_function
 	object_storage = EndlessObjectStorage.new(chunk_length)
 	
@@ -51,7 +52,7 @@ func _object_entered(node : Node):
 	if chunk_players.has(chunk_index):
 		for peer_id in chunk_players[chunk_index].keys():
 			if chunk_players[chunk_index][peer_id]:
-				GameState.set_synchronizers_visibility_for(node, peer_id, true)
+				G.set_synchronizers_visibility_for(node, peer_id, true)
 				object_players.get_or_add(int(node.name), {})[peer_id] = true
 				if peer_id == local_peer_id:
 					node.visible = true
@@ -61,19 +62,17 @@ func _object_exiting(node : Node):
 	object_storage.update_object(int(node.name), node.scene_file_path, node.position, node.rotation)
 	object_players.erase(int(node.name))
 	
-func _player_disconnected(peer_id):
+func _peer_disconnected(peer_id):
 	for key in chunk_players.keys():
-		if chunk_players[key].has(peer_id) and spawned_chunks.has(key):
-			var instance = spawned_chunks[key]
-			instance.set_synchronizers_visibility_for(peer_id, false)
+		if chunk_players[key].has(peer_id):
 			chunk_players[key].erase(peer_id)
+			G.set_synchronizers_visibility_for(spawned_chunks[key], peer_id, false)
 	
 func _spawn_object_function(data):
 	var id = data[0]
 	var scene = data[1]
 	var pos = data[2]
 	var rot = data[3]
-	var chunk = get_chunk_index(pos.z)
 	
 	#print("[%s] _spawn_function %s" % [multiplayer.get_unique_id(), str(data)])
 	
@@ -83,7 +82,7 @@ func _spawn_object_function(data):
 	object.rotation = rot
 	
 	object.visible = not multiplayer.is_server()
-	GameState.set_synchronizers_public_visibility(object, false)
+	G.set_synchronizers_public_visibility(object, false)
 	
 	return object
 
@@ -121,14 +120,14 @@ func _update_objects(_delta):
 					else:
 						visible_players[peer_id] = true
 						still_visible[peer_id] = true
-						GameState.set_synchronizers_visibility_for(node, peer_id, true)
+						G.set_synchronizers_visibility_for(node, peer_id, true)
 						if peer_id == local_peer_id:
 							node.visible = true
 
 		for peer_id in visible_players.keys():
 			if not still_visible.has(peer_id):
 				visible_players.erase(peer_id)
-				GameState.set_synchronizers_visibility_for(node, peer_id, false)
+				G.set_synchronizers_visibility_for(node, peer_id, false)
 				if peer_id == local_peer_id:
 					node.visible = false
 					
@@ -141,6 +140,8 @@ func _update_chunks():
 			player = GameState.current_world.get_client_player()
 			if not player:
 				return
+		else:
+			return
 	
 	var current_chunk = get_chunk_index(player.global_transform.origin.z)
 	
@@ -149,15 +150,15 @@ func _update_chunks():
 		if i < 0: continue
 			
 		if not spawned_chunks.has(i):
-			set_chunk_visiblity_for(local_peer_id, i, true)
+			_set_chunk_visiblity_for(local_peer_id, i, true)
 			_spawn_chunk(i)
 		else:
 			spawned_chunks[i].visible = true
-			set_chunk_visiblity_for(local_peer_id, i, true)
+			_set_chunk_visiblity_for(local_peer_id, i, true)
 			
 	for key in spawned_chunks.keys():
 		if key < current_chunk - view_distance or key > current_chunk + view_distance:
-			set_chunk_visiblity_for(local_peer_id, key, false)
+			_set_chunk_visiblity_for(local_peer_id, key, false)
 			spawned_chunks[key].visible = false
 			
 			if multiplayer.is_server() and has_player(key):
@@ -174,7 +175,7 @@ func _remove_chunk(index):
 	spawned_chunks[index].queue_free()
 	spawned_chunks.erase(index)
 	if not multiplayer.is_server():
-		chunk_removed.rpc_id(1, index)
+		chunk_removed.rpc_id(G.SERVER_PEER_ID, index)
 
 func _spawn_chunk(index):
 	print("[%s] _spawn_chunk: %s" % [multiplayer.get_unique_id(), index])
@@ -195,7 +196,7 @@ func _spawn_chunk(index):
 		else:
 			chunk.generate()
 	else:
-		chunk_loaded.rpc_id(1, index)
+		chunk_loaded.rpc_id(G.SERVER_PEER_ID, index)
 	
 @rpc("any_peer")
 func chunk_loaded(chunk):
@@ -209,7 +210,7 @@ func chunk_loaded(chunk):
 	if not spawned_chunks.has(chunk):
 		_spawn_chunk(chunk)
 		
-	set_chunk_visiblity_for(peer_id, chunk, true)
+	_set_chunk_visiblity_for(peer_id, chunk, true)
 	
 @rpc("any_peer")
 func chunk_removed(chunk):
@@ -219,18 +220,18 @@ func chunk_removed(chunk):
 	var peer_id = multiplayer.get_remote_sender_id()
 	print("[%s] chunk_removed: %s, %s" % [multiplayer.get_unique_id(), peer_id, chunk])
 	
-	set_chunk_visiblity_for(peer_id, chunk, false)
+	_set_chunk_visiblity_for(peer_id, chunk, false)
 	
 	if spawned_chunks.has(chunk):
 		var instance = spawned_chunks[chunk]
-		GameState.set_synchronizers_visibility_for(instance, peer_id, false)
+		G.set_synchronizers_visibility_for(instance, peer_id, false)
 		
 		#TODO: notify object visibility change if needed
 
 func has_player(chunk_index) -> bool:
 	return chunk_players.has(chunk_index) and chunk_players[chunk_index].size() > 0
 	
-func set_chunk_visiblity_for(peer_id:int, chunk_index:int, value:bool):
+func _set_chunk_visiblity_for(peer_id:int, chunk_index:int, value:bool):
 	if chunk_players.has(chunk_index):
 		if value:
 			chunk_players[chunk_index][peer_id] = value
@@ -242,13 +243,14 @@ func set_chunk_visiblity_for(peer_id:int, chunk_index:int, value:bool):
 			chunk_players[chunk_index][peer_id] = value
 			
 	if spawned_chunks.has(chunk_index):
-		GameState.set_synchronizers_visibility_for(spawned_chunks[chunk_index], peer_id, true)
+		G.set_synchronizers_visibility_for(spawned_chunks[chunk_index], peer_id, true)
 
-func _unload_object_from_chunk(index):
-	print("_unload_object_from_chunk: %s" % index)
+func _unload_object_from_chunk(_index):
+	#print("[%s] _unload_object_from_chunk: %s" % [multiplayer.get_unique_id(), index])
+	pass
 
 func _load_object_from_storage(index):
-	print("_load_object_from_storage: %s" % index)
+	print("[%s] _load_object_from_storage: %s" % [multiplayer.get_unique_id(), index])
 	var items = object_storage.get_objects(index * chunk_length, 0)
 	for i in items:
 		var id = str(i.id)

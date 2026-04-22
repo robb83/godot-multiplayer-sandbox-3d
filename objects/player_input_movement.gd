@@ -86,13 +86,13 @@ func _handle_jump():
 func _handle_secondary_interaction(short_press : bool):
 	if player.held_object:
 		if short_press:
-			player.held_object.drop.rpc_id(1)
+			player.held_object.drop.rpc_id(G.SERVER_PEER_ID)
 		else:
 			var impulse = -player.camera.global_transform.basis.z * lerp(throw_min_force, throw_max_force, clamp(interaction_hold_time / throw_max_charge_time, 0.0, 1.0))
-			player.held_object.throw.rpc_id(1, impulse)
+			player.held_object.throw.rpc_id(G.SERVER_PEER_ID, impulse)
 	elif short_press:
 		var pos = player.camera.global_transform.origin + -player.camera.global_transform.basis.z * 5
-		GameState.current_world.spawn_object.rpc_id(1, pos)
+		GameState.current_world.spawn_object.rpc_id(G.SERVER_PEER_ID, pos)
 	
 func _handle_primary_interaction():
 	var result = player.ray_cast_interaction.get_collider()
@@ -101,15 +101,15 @@ func _handle_primary_interaction():
 		var collision_point = player.ray_cast_interaction.get_collision_point()
 		if collider.is_in_group("interactable"):
 			var controller = collider.get_meta("interactable")
-			controller.interact.rpc_id(1)
+			controller.interact.rpc_id(G.SERVER_PEER_ID)
 		if collider.is_in_group("driveable"):
 			var controller = collider.get_meta("driveable")
-			controller.drive.rpc_id(1)
+			controller.drive.rpc_id(G.SERVER_PEER_ID)
 		elif collider.is_in_group("pickable"):
 			var controller = collider.get_meta("pickable")
 			object_rotation = Vector2.ZERO
 			object_distance = clamp(collision_point.distance_to(player.global_position) - 0.3, object_min_distance, object_max_distance)
-			controller.pickup.rpc_id(1, controller.target.to_local(collision_point))
+			controller.pickup.rpc_id(G.SERVER_PEER_ID, controller.target.to_local(collision_point))
 
 func _handle_interaction_visual_feedback():
 	var msi = player.mouse_state_indicator

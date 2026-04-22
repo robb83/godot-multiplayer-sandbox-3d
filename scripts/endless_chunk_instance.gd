@@ -7,8 +7,8 @@ var generated : bool = false
 var manager : EndlessChunkManager = null
 
 func _enter_tree() -> void:
-	GameState.set_synchronizers_public_visibility(self, false)
-	GameState.set_synchronizers_visibility_for(self, get_multiplayer_authority(), true)
+	G.set_synchronizers_public_visibility(self, false)
+	G.set_synchronizers_visibility_for(self, get_multiplayer_authority(), true)
 
 func _ready():
 	pass

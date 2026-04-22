@@ -13,7 +13,6 @@ var selectable_worlds = []
 
 func _ready():
 	_populate_options()
-	
 	Network.state_changed.connect(_on_network_state_changed)
 
 func _populate_options():

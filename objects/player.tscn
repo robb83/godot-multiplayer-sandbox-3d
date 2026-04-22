@@ -31,20 +31,6 @@ properties/7/path = NodePath(".:held_object_rotation")
 properties/7/spawn = true
 properties/7/replication_mode = 2
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nmc1l"]
-properties/0/path = NodePath(".:input_throttle")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:input_brake")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:input_steering")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:input_horn")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4flbx"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nmc1l"]
@@ -83,6 +69,7 @@ script = ExtResource("1_4flbx")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=202814022]
 replication_config = SubResource("SceneReplicationConfig_uxov2")
+public_visibility = false
 
 [node name="PlayerInputMovement" type="Node" parent="." unique_id=1145272513 node_paths=PackedStringArray("player")]
 script = ExtResource("2_uxov2")
@@ -93,9 +80,6 @@ metadata/_custom_type_script = "uid://xu36p8xcpch7"
 script = ExtResource("3_nmc1l")
 player = NodePath("..")
 metadata/_custom_type_script = "uid://sjd6c454xd3s"
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerVehicleInput" unique_id=1799094365]
-replication_config = SubResource("SceneReplicationConfig_nmc1l")
 
 [node name="MouseStateIndicator" type="Node2D" parent="." unique_id=127833990]
 visible = false
