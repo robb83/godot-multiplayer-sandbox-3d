@@ -7,6 +7,8 @@ extends Control
 @onready var button_create_server: Button = $CenterContainer/VBoxContainer/ButtonCreateServer
 @onready var button_join: Button = $CenterContainer/VBoxContainer/ButtonJoin
 @onready var option_worlds: OptionButton = $CenterContainer/VBoxContainer/OptionWorlds
+@onready var edit_server_password_1: LineEdit = $CenterContainer/VBoxContainer/EditServerPassword1
+@onready var edit_server_password_2: LineEdit = $CenterContainer/VBoxContainer/EditServerPassword2
 
 var wait_for_connect = false
 var selectable_worlds = []
@@ -29,11 +31,13 @@ func _on_button_create_server_pressed() -> void:
 		return
 	GameState.selected_world = selectable_worlds[selected]
 	var host_port = int(edit_server_port_1.text)
+	var password = edit_server_password_1.text
+	
 	button_cancel.visible = true
 	button_join.disabled = true
 	button_create_server.disabled = true
 	option_worlds.disabled = true
-	var err = Network.network_host(host_port)
+	var err = Network.network_host(host_port, password)
 	if err != OK:
 		UI.show_error_message("Network Error", "Cannot create server.")
 
@@ -42,13 +46,14 @@ func _on_button_join_pressed() -> void:
 	AudioManager.play_click()
 	var ip = edit_server_ip_2.text
 	var port = int(edit_server_port_2.text)
+	var password = edit_server_password_2.text
 	
 	button_cancel.visible = true
 	button_join.disabled = true
 	button_create_server.disabled = true
 	option_worlds.disabled = true
 	
-	var err = Network.network_join(ip, port)
+	var err = Network.network_join(ip, port, password)
 	if err != OK:
 		UI.show_error_message("Network Error", "Cannot join to server.")
 	else:
@@ -69,6 +74,9 @@ func _on_network_state_changed(state):
 		if wait_for_connect:
 			wait_for_connect = false
 			UI.show_error_message("Network Error", "Connection timeout.")
+	elif state == Network.NetworkState.AUTH_FAILED:
+		wait_for_connect = false
+		UI.show_error_message("Network Error", "Authentication failed.")
 	elif state == Network.NetworkState.LISTENING:
 		$CenterContainer.hide()
 	elif state == Network.NetworkState.CONNECTED:

@@ -2,7 +2,7 @@ extends Node
 
 # 20: Couldn't create an ENet host.
 
-enum NetworkState { NOT_CONNECTED, CONNECTING, CONNECTED , LISTENING }
+enum NetworkState { NOT_CONNECTED, CONNECTING, CONNECTED, AUTH_FAILED , LISTENING }
 
 signal state_changed
 signal peer_connected
@@ -12,6 +12,8 @@ signal disconnected
 var current_id : int = -1
 var state : NetworkState = NetworkState.NOT_CONNECTED
 var original_title = null
+var password = null
+var crypto : Crypto = Crypto.new()
 
 func _ready():
 	multiplayer.server_relay = true
@@ -20,11 +22,49 @@ func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
+	multiplayer.peer_authenticating.connect(_authenticating)
+	multiplayer.peer_authentication_failed.connect(_authenticating_failed)
+	multiplayer.auth_callback = _authenticator
 	
-func network_host(port):
+func _authenticator(id, data):
+	print("[%s] _authenticator: %s" % [current_id, id])
+	
+	if multiplayer.is_server():
+		if password:
+			if G.compare_auth_message(crypto, current_id, id, password, data):
+				multiplayer.complete_auth(id)
+				print("[%s] authenticate accepted: %s" % [current_id, id])
+		else:
+			multiplayer.complete_auth(id)
+			print("[%s] authenticate accepted: %s" % [current_id, id])
+			
+func _authenticating_failed(id):
+	print("[%s] _authenticating_failed: %s" % [current_id, id])
+	
+	if not multiplayer.is_server():
+		_set_state(NetworkState.AUTH_FAILED)
+		
+func _authenticating(id):
+	print("[%s] _authenticating: %s" % [current_id, id])
+	
+	if multiplayer.is_server():
+		if not password:
+			multiplayer.complete_auth(id)
+		
+	if id == G.SERVER_PEER_ID:
+		if password:
+			multiplayer.send_auth(id, G.create_auth_message(crypto, id, current_id, password))
+			multiplayer.complete_auth(id)
+			password = null
+			print("[%s] authentication sent" % [current_id])
+		else:
+			multiplayer.complete_auth(id)
+	
+func network_host(port, pswd):
 	var peer = ENetMultiplayerPeer.new()
 	var err := peer.create_server(port, 4)
 	if err == OK:
+		password = pswd
 		multiplayer.set_multiplayer_peer(peer)
 		current_id = peer.get_unique_id()
 		_set_state(NetworkState.LISTENING)
@@ -33,7 +73,8 @@ func network_host(port):
 		_set_state(NetworkState.NOT_CONNECTED)
 	return err
 	
-func network_join(ip, port):
+func network_join(ip, port, pswd):
+	password = pswd
 	_set_state(NetworkState.CONNECTING)
 	
 	var peer = ENetMultiplayerPeer.new()
