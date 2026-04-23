@@ -1,5 +1,6 @@
 extends Node
 
+var current_peer_id := -1
 var selected_world = null
 var current_world : Node = null
 var menu_visible : bool = false

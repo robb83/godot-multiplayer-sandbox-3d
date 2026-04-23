@@ -3,6 +3,11 @@ extends Node
 const SERVER_PEER_ID : int = 1
 const SHARED_SECRET : String = "GodotMultiplayerSandbox3D"
 
+const COLORS = [
+	Color("#E53935"), Color("#1E88E5"), Color("#43A047"), 
+	Color("#8E24AA"), Color("#212121"), Color("#FAFAFA") 
+]
+
 func trace(message : String, ...args:Array):
 	var header = "[%s] " % multiplayer.get_unique_id()
 	print(header, message % args)

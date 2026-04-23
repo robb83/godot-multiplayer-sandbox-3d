@@ -27,7 +27,11 @@ class_name Player
 @export var held_object_rotation : Vector2 = Vector2.ZERO
 @export var crouching : bool = false
 @export var player_peer_id := 1
-
+@export var player_skin : int = 0:
+	set(value):
+		player_skin = value
+		_update_skin()
+		
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var acceleration : float = 2.0
 var walk_speed : float = 6.0
@@ -78,7 +82,8 @@ func _ready():
 		shape_cast_head.add_exception(self)
 		shape_cast_head.visible = true
 		shape_cast_head.enabled = true
-
+	_update_skin()
+	
 func _process(_delta):
 	if is_multiplayer_authority():
 		if crouching and not player_input.crouching:
@@ -205,3 +210,10 @@ func _change_collision():
 		visual_body_crouch.visible = false
 		visual_face.position = Vector3.ZERO
 		camera_pivot.position = Vector3(0, 1.6, 0)
+
+func _update_skin():
+	if visual_body_stand and visual_body_crouch:
+		var m = StandardMaterial3D.new()
+		m.albedo_color = G.COLORS[player_skin]
+		visual_body_crouch.material_override = m
+		visual_body_stand.material_override = m

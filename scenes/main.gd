@@ -4,7 +4,6 @@ extends Node
 @onready var main_menu: Control = $MainMenu
 @onready var menu_loading: Control = $MenuLoading
 
-var current_peer_id := -1
 var loading_scene = null
 
 func _ready():
@@ -35,13 +34,13 @@ func _process(_delta: float) -> void:
 	
 func _on_network_state_changed(state):
 	if state == Network.NetworkState.NOT_CONNECTED:
-		current_peer_id = -1
+		GameState.current_peer_id = -1
 		main_menu.show()
 		menu_loading.hide()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		GameState.reset()
 	elif state == Network.NetworkState.LISTENING:
-		current_peer_id = multiplayer.get_unique_id()
+		GameState.current_peer_id = multiplayer.get_unique_id()
 		main_menu.hide()
 		#Set GameState.current_world
 		if GameState.selected_world:
@@ -50,7 +49,7 @@ func _on_network_state_changed(state):
 		else:
 			Network.network_disconnect()
 	elif state == Network.NetworkState.CONNECTED:
-		current_peer_id = multiplayer.get_unique_id()
+		GameState.current_peer_id = multiplayer.get_unique_id()
 		menu_loading.show()
 		main_menu.hide()
 

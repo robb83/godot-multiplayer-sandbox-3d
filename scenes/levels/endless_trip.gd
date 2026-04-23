@@ -40,13 +40,14 @@ func _input(_event: InputEvent) -> void:
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			
-func _handle_player_spawn(player_peer_id, player_position):
+func _handle_player_spawn(player_peer_id, player_position, player_skin):
 	G.trace("_handle_player_spawn: %s %s", player_peer_id, player_position)
 	
 	var character = player_template.instantiate()
 	character.player_peer_id = player_peer_id
 	character.name = str(player_peer_id)
 	character.position = player_position
+	character.player_skin = player_skin
 	character.set_multiplayer_authority(player_peer_id)
 	
 	if player_peer_id == multiplayer.get_unique_id():
@@ -59,7 +60,7 @@ func add_player(id: int):
 	G.trace("add_player %s", id)
 	var dir := Vector2.from_angle(randf() * 2 * PI)
 	var pos := SPAWN_POINT + Vector3(dir.x, 0.0, dir.y) * SPAWN_RANDOM
-	player_spawner.spawn(id, pos)
+	player_spawner.spawn(id, pos, id % G.COLORS.size())
 	
 func del_player(id: int):
 	if not players.has_node(str(id)):

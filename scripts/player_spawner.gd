@@ -6,8 +6,8 @@ class_name PlayerSpawner
 var spawn_function : Callable
 var client_peer_id : int = -1
 	
-func spawn(peer_id, pos):
-	var node = spawn_function.call(peer_id, pos)
+func spawn(peer_id, pos, skin):
+	var node = spawn_function.call(peer_id, pos, skin)
 	player_container.add_child(node, true)
 
 func visibility_filter(id : int):
@@ -27,13 +27,13 @@ func _player_added(node : Node):
 		for n in player_container.get_children():
 			var np = n.player_peer_id
 			if np != peer_id and np != client_peer_id:
-				player_spawn.rpc_id(np, peer_id, node.position)
+				player_spawn.rpc_id(np, peer_id, node.position, node.player_skin)
 		
 		# broadcast existing players to new client
 		if peer_id != client_peer_id:
 			for n in player_container.get_children():
 				var np = n.player_peer_id
-				player_spawn.rpc_id(peer_id, np, n.position)
+				player_spawn.rpc_id(peer_id, np, n.position, n.player_skin)
 	
 	GameState.peer_player_spawned[peer_id] = true
 	if peer_id == client_peer_id and GameState.current_world:
@@ -53,9 +53,9 @@ func _player_removed(node : Node):
 		GameState.current_world.set_current_player(null)
 	
 @rpc("authority")
-func player_spawn(peer_id, pos):
+func player_spawn(peer_id, pos, skin):
 	G.trace("player_spawn: %s", peer_id)
-	var node = spawn_function.call(peer_id, pos)
+	var node = spawn_function.call(peer_id, pos, skin)
 	if player_container.get_node_or_null(str(peer_id)):
 		G.trace("player_spawn: already exists (%s, %s)", node.name, peer_id)
 	player_container.add_child(node, true)

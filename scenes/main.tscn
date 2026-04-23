@@ -9,10 +9,6 @@
 [node name="Main" type="Node" unique_id=1753394026]
 script = ExtResource("1_sugp2")
 
-[node name="LabelFPS" type="Label" parent="." unique_id=1578362403]
-offset_right = 125.0
-offset_bottom = 66.0
-
 [node name="MainMenu" parent="." unique_id=967372395 instance=ExtResource("2_jyhfs")]
 
 [node name="MenuOptions" parent="." unique_id=1566645939 instance=ExtResource("3_tbgi4")]

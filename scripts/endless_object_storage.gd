@@ -24,7 +24,6 @@ func update_object(id: int, scene: String, pos: Vector3, rot: Vector3):
 		if previous_chunk != current_chunk:
 			object_to_chunk[id] = current_chunk
 			chunks[previous_chunk].erase(id)
-			print(id)
 	else:
 		object_to_chunk[id] = current_chunk
 	

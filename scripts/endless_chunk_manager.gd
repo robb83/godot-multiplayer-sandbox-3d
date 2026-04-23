@@ -26,11 +26,13 @@ var chunk02 := preload("res://scenes/levels/endless_chunks/endless_trip_chunk_st
 
 var player : Player = null
 var spawned_chunks = {}
+var chunk_objects : Dictionary = {}
 var chunk_players : Dictionary = {}
 var chunk_states : Dictionary = {}
 var object_counter : int = 1
 var object_storage : EndlessObjectStorage = null
 var object_players : Dictionary = {}
+var objects_chunk : Dictionary = {}
 var local_peer_id = 1
 
 func get_chunk_index(z_pos: float) -> int:
@@ -54,8 +56,11 @@ func _object_visiblity_filter(peer : int, object_id : int) -> bool:
 func _object_entered(node : Node):
 	#G.trace("_object_entered = %s", node.name)
 	var object_id = int(node.name)
-	
 	var chunk_index = get_chunk_index(node.position.z)
+	
+	objects_chunk[object_id] = chunk_index
+	chunk_objects.get_or_add(chunk_index, {})[object_id] = true
+	
 	if chunk_players.has(chunk_index):
 		for peer_id in chunk_players[chunk_index].keys():
 			if chunk_players[chunk_index][peer_id]:
@@ -65,13 +70,17 @@ func _object_entered(node : Node):
 
 func _object_exiting(node : Node):
 	#G.trace("_object_exiting = %s", node.name)
-	object_storage.update_object(int(node.name), node.scene_file_path, node.position, node.rotation)
-	object_players.erase(int(node.name))
+	var object_id = int(node.name)
+	var chunk_index = objects_chunk.get(object_id, -1)
+	if chunk_objects.has(chunk_index):
+		chunk_objects[chunk_index].erase(object_id)
+	objects_chunk.erase(object_id)
+	object_storage.update_object(object_id, node.scene_file_path, node.position, node.rotation)
+	object_players.erase(object_id)
 	
 func _peer_disconnected(peer_id):
 	for key in chunk_players.keys():
-		if chunk_players[key].has(peer_id):
-			chunk_players[key].erase(peer_id)
+		chunk_players[key].erase(peer_id)
 	
 func _spawn_object_function(data):
 	var id = data[0]
@@ -120,7 +129,13 @@ func _update_objects(_delta):
 		var chunk_index = get_chunk_index(node.position.z)
 		var visible_players = object_players.get_or_add(object_id, {})
 		var players_in_chunk = chunk_players.get(chunk_index)
+		var previous_object_chunk = objects_chunk.get(object_id, -1)
 		var still_visible = {}
+		
+		if previous_object_chunk != chunk_index:
+			chunk_objects[previous_object_chunk].erase(object_id)
+			objects_chunk[object_id] = chunk_index
+			chunk_objects.get_or_add(chunk_index, {})[object_id] = true
 		
 		if players_in_chunk:
 			for peer_id in players_in_chunk.keys():
@@ -164,7 +179,10 @@ func _update_chunks():
 			_set_chunk_visiblity_for(local_peer_id, key, false)
 			spawned_chunks[key].visible = false
 			
-			if multiplayer.is_server() and has_player(key):
+			if multiplayer.is_server():
+				if has_player(key) or has_object(key):
+					continue
+			elif has_object(key):
 				continue
 				
 			_remove_chunk(key)
@@ -232,6 +250,9 @@ func chunk_removed(chunk):
 
 func has_player(chunk_index) -> bool:
 	return chunk_players.has(chunk_index) and chunk_players[chunk_index].size() > 0
+
+func has_object(chunk_index) -> bool:
+	return chunk_objects.has(chunk_index) and chunk_objects[chunk_index].size() > 0
 	
 func _set_chunk_visiblity_for(peer_id:int, chunk_index:int, value:bool):
 	if value:
