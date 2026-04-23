@@ -3,6 +3,7 @@ extends Node3D
 #@onready var player_template2 = preload("res://huge_mesh.tres")
 @onready var player_template = preload("res://objects/player.tscn")
 @onready var pickable_01 = preload("res://objects/pickable_03.tscn")
+@onready var options: Control = $UI/Options
 
 @onready var player_container: Node3D = $Players
 @onready var static_objects: Node3D = $StaticObjects
@@ -13,6 +14,7 @@ extends Node3D
 const SPAWN_RANDOM := 5.0
 
 func _ready():
+	G.trace("_ready %s", self.name)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	player_spawner.spawn_function = _handle_player_spawn
 	
@@ -37,8 +39,18 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	GameState.current_world = null
 
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("menu"):
+		options.visible = not options.visible
+		GameState.menu_visible = options.visible
+		
+		if options.visible:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 func _handle_player_spawn(player_peer_id, player_position):	
-	print("[%s] _handle_player_spawn: %s" % [multiplayer.get_unique_id(), str([player_peer_id, player_position])])
+	G.trace("_handle_player_spawn: %s", str([player_peer_id, player_position]))
 	
 	var character = player_template.instantiate()
 	character.player_peer_id = player_peer_id
@@ -53,7 +65,7 @@ func _handle_player_spawn(player_peer_id, player_position):
 	return character
 
 func add_player(id: int):
-	print("[%s] add_player: %s" % [multiplayer.get_unique_id(), id])
+	G.trace("add_player: %s", id)
 	var dir := Vector2.from_angle(randf() * 2 * PI)
 	var pos := Vector3(dir.x * SPAWN_RANDOM * randf(), 0, dir.y * SPAWN_RANDOM * randf())
 	player_spawner.spawn(id, pos)
@@ -64,16 +76,7 @@ func del_player(id: int):
 		player.queue_free()
 
 func set_current_player(player : Player):
-	if multiplayer.has_multiplayer_peer():
-		if player:
-			print("[%s] set_current_player: %s" % [multiplayer.get_unique_id(), player.player_peer_id])
-		else:
-			print("[%s] set_current_player: null" % [multiplayer.get_unique_id()])
-	else:
-		if player:
-			print("[no_peer] set_current_player: %s" % [player.player_peer_id])
-		else:
-			print("[no_peer] set_current_player: null")
+	G.trace("set_current_player: %s", str(player.player_peer_id) if player else "null")
 	
 func get_player_by_peer(peer_id):
 	return player_container.get_node(str(peer_id)) if player_container.has_node(str(peer_id)) else null

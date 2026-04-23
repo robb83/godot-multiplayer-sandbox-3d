@@ -1,7 +1,6 @@
 extends Node
 
 @onready var worlds: Node = $Worlds
-@onready var menu_options: Control = $MenuOptions
 @onready var main_menu: Control = $MainMenu
 @onready var menu_loading: Control = $MenuLoading
 
@@ -11,17 +10,8 @@ var loading_scene = null
 func _ready():
 	Network.state_changed.connect(_on_network_state_changed)
 	Network.peer_connected.connect(_peer_connected)
-
-func _input(_event: InputEvent) -> void:
-	if Network.state != Network.NetworkState.NOT_CONNECTED and Input.is_action_just_pressed("menu") and not menu_loading.visible:
-		menu_options.visible = not menu_options.visible
-		if menu_options.visible:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		else:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 func _process(_delta: float) -> void:
-	GameState.menu_visible = menu_options.visible or main_menu.visible or menu_loading.visible
 	
 	if loading_scene:
 		var scene_path = loading_scene
@@ -42,12 +32,11 @@ func _process(_delta: float) -> void:
 				loading_scene = null
 				menu_loading.hide()
 				Network.network_disconnect()
-				printerr("FAILED")
+				printerr("Resource loading failed.")
 	
 func _on_network_state_changed(state):
 	if state == Network.NetworkState.NOT_CONNECTED:
 		current_peer_id = -1
-		menu_options.hide()
 		main_menu.show()
 		menu_loading.hide()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -72,7 +61,7 @@ func _peer_connected(id: int):
 
 @rpc("authority", "call_local")
 func load_world(scene):
-	print("[%s]: load_world: %s" % [multiplayer.get_unique_id(), scene])
+	G.trace("load_world: %s", scene)
 	
 	var err = ResourceLoader.load_threaded_request(scene)
 	if err == OK:

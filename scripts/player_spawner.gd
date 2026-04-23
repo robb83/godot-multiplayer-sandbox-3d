@@ -54,15 +54,15 @@ func _player_removed(node : Node):
 	
 @rpc("authority")
 func player_spawn(peer_id, pos):
-	print("[%s] player_spawn: %s" % [multiplayer.get_unique_id(), peer_id])
+	G.trace("player_spawn: %s", peer_id)
 	var node = spawn_function.call(peer_id, pos)
 	if player_container.get_node_or_null(str(peer_id)):
-		print("[%s] player_spawn: already exists (%s, %s)" % [multiplayer.get_unique_id(), node.name, peer_id])
+		G.trace("player_spawn: already exists (%s, %s)", node.name, peer_id)
 	player_container.add_child(node, true)
 
 @rpc("authority")
 func player_despawn(peer_id):
-	print("[%s] player_despawn: %s" % [multiplayer.get_unique_id(), peer_id])
+	G.trace("player_despawn: %s", peer_id)
 	var node = player_container.get_node_or_null(str(peer_id))
 	if node:
 		node.queue_free()

@@ -49,7 +49,7 @@ func client_ready():
 
 @rpc("any_peer")
 func client_ready_remote():
-	print("[%s] client_ready %s" % [multiplayer.get_unique_id(), multiplayer.get_remote_sender_id()])
+	G.trace("client_ready %s", multiplayer.get_remote_sender_id())
 	if multiplayer.is_server():
 		var peer_id = multiplayer.get_remote_sender_id()
 		peers_ready[peer_id] = true

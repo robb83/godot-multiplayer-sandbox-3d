@@ -3,6 +3,10 @@ extends Node
 const SERVER_PEER_ID : int = 1
 const SHARED_SECRET : String = "GodotMultiplayerSandbox3D"
 
+func trace(message : String, ...args:Array):
+	var header = "[%s] " % multiplayer.get_unique_id()
+	print(header, message % args)
+	
 func set_synchronizers_visibility_for(root: Node, peer_id : int, value: bool) -> void:
 	if !is_instance_valid(root):
 		return

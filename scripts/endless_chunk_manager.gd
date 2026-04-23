@@ -47,7 +47,7 @@ func _ready():
 		object_container.child_entered_tree.connect(_object_entered)
 
 func _object_entered(node : Node):
-	#print("_object_entered = %s" % node.name)
+	#G.trace("_object_entered = %s", node.name)
 	var chunk_index = get_chunk_index(node.position.z)
 	if chunk_players.has(chunk_index):
 		for peer_id in chunk_players[chunk_index].keys():
@@ -58,7 +58,7 @@ func _object_entered(node : Node):
 					node.visible = true
 
 func _object_exiting(node : Node):
-	#print("_object_exiting = %s" % node.name)
+	#G.trace("_object_exiting = %s", node.name)
 	object_storage.update_object(int(node.name), node.scene_file_path, node.position, node.rotation)
 	object_players.erase(int(node.name))
 	
@@ -74,7 +74,7 @@ func _spawn_object_function(data):
 	var pos = data[2]
 	var rot = data[3]
 	
-	#print("[%s] _spawn_function %s" % [multiplayer.get_unique_id(), str(data)])
+	#G.trace("_spawn_function %s", str(data))
 	
 	var object = load(scene).instantiate()
 	object.name = str(id)
@@ -87,7 +87,7 @@ func _spawn_object_function(data):
 	return object
 
 func spawn_dynamic_object(scene_path, pos, rot):
-	#print("[%s] spawn_dynamics_object %s, %s" % [multiplayer.get_unique_id(), str(scene_path), pos])
+	#G.trace("spawn_dynamics_object %s, %s", str(scene_path), pos)
 	
 	#TODO: object type id
 	
@@ -165,7 +165,7 @@ func _update_chunks():
 			_remove_chunk(key)
 
 func _remove_chunk(index):
-	print("[%s] _remove_chunk: %s" % [multiplayer.get_unique_id(), index])
+	G.trace("_remove_chunk: %s", index)
 	
 	_unload_object_from_chunk(index)
 	
@@ -176,7 +176,7 @@ func _remove_chunk(index):
 		chunk_removed.rpc_id(G.SERVER_PEER_ID, index)
 
 func _spawn_chunk(index):
-	print("[%s] _spawn_chunk: %s" % [multiplayer.get_unique_id(), index])
+	G.trace("_spawn_chunk: %s", index)
 	
 	var chunk = start_scene.instantiate() if index == 0 else chunk_scene.instantiate()
 	chunk.name = str(index)
@@ -203,7 +203,7 @@ func chunk_loaded(chunk):
 	if not multiplayer.is_server():
 		return
 		
-	print("[%s] chunk_loaded: %s, %s" % [multiplayer.get_unique_id(), peer_id, chunk])
+	G.trace("chunk_loaded: %s, %s", peer_id, chunk)
 		
 	if not spawned_chunks.has(chunk):
 		_spawn_chunk(chunk)
@@ -216,7 +216,7 @@ func chunk_removed(chunk):
 		return
 		
 	var peer_id = multiplayer.get_remote_sender_id()
-	print("[%s] chunk_removed: %s, %s" % [multiplayer.get_unique_id(), peer_id, chunk])
+	G.trace("chunk_removed: %s, %s", peer_id, chunk)
 	
 	_set_chunk_visiblity_for(peer_id, chunk, false)
 	
@@ -244,11 +244,11 @@ func _set_chunk_visiblity_for(peer_id:int, chunk_index:int, value:bool):
 		G.set_synchronizers_visibility_for(spawned_chunks[chunk_index], peer_id, true)
 
 func _unload_object_from_chunk(_index):
-	#print("[%s] _unload_object_from_chunk: %s" % [multiplayer.get_unique_id(), index])
+	#G.trace("_unload_object_from_chunk: %s", index)
 	pass
 
 func _load_object_from_storage(index):
-	print("[%s] _load_object_from_storage: %s" % [multiplayer.get_unique_id(), index])
+	G.trace("_load_object_from_storage: %s", index)
 	var items = object_storage.get_objects(index * chunk_length, 0)
 	for i in items:
 		var id = str(i.id)

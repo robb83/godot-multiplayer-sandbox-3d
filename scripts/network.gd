@@ -27,25 +27,25 @@ func _ready():
 	multiplayer.auth_callback = _authenticator
 	
 func _authenticator(id, data):
-	print("[%s] _authenticator: %s" % [current_id, id])
+	G.trace("_authenticator: %s", id)
 	
 	if multiplayer.is_server():
 		if password:
 			if G.compare_auth_message(crypto, current_id, id, password, data):
 				multiplayer.complete_auth(id)
-				print("[%s] authenticate accepted: %s" % [current_id, id])
+				G.trace("authenticate accepted: %s", id)
 		else:
 			multiplayer.complete_auth(id)
-			print("[%s] authenticate accepted: %s" % [current_id, id])
+			G.trace("authenticate accepted: %s", id)
 			
 func _authenticating_failed(id):
-	print("[%s] _authenticating_failed: %s" % [current_id, id])
+	G.trace("_authenticating_failed: %s", id)
 	
 	if not multiplayer.is_server():
 		_set_state(NetworkState.AUTH_FAILED)
 		
 func _authenticating(id):
-	print("[%s] _authenticating: %s" % [current_id, id])
+	G.trace("_authenticating: %s", id)
 	
 	if multiplayer.is_server():
 		if not password:
@@ -56,7 +56,7 @@ func _authenticating(id):
 			multiplayer.send_auth(id, G.create_auth_message(crypto, id, current_id, password))
 			multiplayer.complete_auth(id)
 			password = null
-			print("[%s] authentication sent" % [current_id])
+			G.trace("authentication sent")
 		else:
 			multiplayer.complete_auth(id)
 	
@@ -88,7 +88,7 @@ func network_join(ip, port, pswd):
 	return err
 	
 func network_disconnect():
-	print("[%s] network_disconnect" % [current_id])
+	G.trace("network_disconnect")
 	multiplayer.set_multiplayer_peer(null)
 	_set_state(NetworkState.NOT_CONNECTED)
 	
@@ -96,25 +96,25 @@ func network_kick(peer_id):
 	multiplayer.get_multiplayer_peer().disconnect_peer(peer_id)
 
 func _peer_connected(id: int) -> void:
-	print("[%s] _player_connected = %d" % [current_id, id])
+	G.trace("_player_connected = %d", id)
 	peer_connected.emit(id)
 
 func _peer_disconnected(id: int) -> void:
-	print("[%s] _player_disconnected = %d" % [current_id, id])
+	G.trace("_player_disconnected = %d", id)
 	peer_disconnected.emit(id)
 
 func _on_connected_ok() -> void:
-	print("[%s] _on_connected_ok" % [current_id])
+	G.trace("_on_connected_ok")
 	_set_state(NetworkState.CONNECTED)
 	get_window().title = get_window().title
 	
 func _on_connected_fail():
-	print("[%s] _on_connected_fail" % [current_id])
+	G.trace("_on_connected_fail")
 	multiplayer.set_multiplayer_peer(null)
 	_set_state(NetworkState.NOT_CONNECTED)
 	
 func _on_server_disconnected():
-	print("[%s] _on_server_disconnected" % [current_id])
+	G.trace("_on_server_disconnected")
 	_set_state(NetworkState.NOT_CONNECTED)
 	disconnected.emit()
 	multiplayer.set_multiplayer_peer(null)

@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dgcnhuxgal8e1"]
 
+[ext_resource type="Script" uid="uid://dispmwe6ulkv4" path="res://scenes/ui/menu_loading.gd" id="1_dhyaj"]
+
 [node name="MenuLoading" type="Control" unique_id=1364446812]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_dhyaj")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1894728483]
 layout_mode = 1
@@ -36,3 +39,13 @@ value = 50.0
 show_percentage = false
 indeterminate = true
 editor_preview_indeterminate = false
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1354860887]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="ButtonDisconnect" type="Button" parent="MarginContainer/VBoxContainer/MarginContainer" unique_id=2109677162]
+layout_mode = 2
+text = "Disconnect"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/MarginContainer/ButtonDisconnect" to="." method="_on_button_disconnect_pressed"]
