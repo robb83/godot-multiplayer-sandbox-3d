@@ -1,7 +1,7 @@
 extends Control
 
-@onready var label_network: Label = $VBoxContainer/LabelNetwork
-@onready var label_fps: Label = $VBoxContainer/LabelFPS
+@onready var label_fps: Label = $MarginContainer/MarginContainer/VBoxContainer/LabelFPS
+@onready var label_network: Label = $MarginContainer/MarginContainer/VBoxContainer/LabelNetwork
 
 func _ready():
 	update_peers()

@@ -2,6 +2,13 @@
 
 [ext_resource type="Script" uid="uid://vg6bxq8mo8cy" path="res://scenes/ui/menu_statistics.gd" id="1_bve2u"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ex038"]
+bg_color = Color(0.039215688, 0.039215688, 0.039215688, 0.23529412)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="MenuStatistics" type="Control" unique_id=1323699873]
 layout_mode = 3
 anchors_preset = 0
@@ -10,16 +17,36 @@ script = ExtResource("1_bve2u")
 [node name="Timer" type="Timer" parent="." unique_id=1766524279]
 autostart = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1797368909]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=608752574]
 layout_mode = 0
-offset_right = 422.0
-offset_bottom = 150.0
+offset_right = 220.0
+offset_bottom = 68.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="LabelFPS" type="Label" parent="VBoxContainer" unique_id=221012920]
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=2127706907]
 layout_mode = 2
-text = "Network Statistics"
+theme_override_styles/panel = SubResource("StyleBoxFlat_ex038")
 
-[node name="LabelNetwork" type="Label" parent="VBoxContainer" unique_id=435115788]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=1542046862]
 layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer" unique_id=1797368909]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="LabelFPS" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=221012920]
+layout_mode = 2
+text = "FPS"
+
+[node name="LabelNetwork" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=435115788]
+layout_mode = 2
+text = "Network"
 
 [connection signal="timeout" from="Timer" to="." method="update_peers"]
