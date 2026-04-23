@@ -1,7 +1,7 @@
 extends Node
 class_name PlayerInputVehicle
 
-#@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
+@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
 
 @export var player : Player = null
 @export var input_throttle : float = 0.0
@@ -13,7 +13,8 @@ func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_physics_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_input(get_multiplayer_authority() == multiplayer.get_unique_id())
-	#multiplayer_synchronizer.add_visibility_filter( func (_id): return player.vehicle_driver )
+	multiplayer_synchronizer.add_visibility_filter( func (_id): return player.vehicle_driver )
+	multiplayer_synchronizer.public_visibility = true
 	
 func _input(_event: InputEvent):
 	if GameState.menu_visible:

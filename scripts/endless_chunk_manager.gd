@@ -97,6 +97,9 @@ func spawn_dynamic_object(scene_path, pos, rot):
 	object_storage.update_object(id, scene_path, pos, rot)
 	multiplayer_spawner_objects.spawn([id, scene_path, pos, rot])
 	
+func set_player(p:Player):
+	player = p
+	
 func _process(_delta):
 	_update_chunks()
 	_update_objects(_delta)
@@ -136,12 +139,7 @@ func _update_objects(_delta):
 		
 func _update_chunks():
 	if not player:
-		if GameState.current_world:
-			player = GameState.current_world.get_client_player()
-			if not player:
-				return
-		else:
-			return
+		return
 	
 	var current_chunk = get_chunk_index(player.global_transform.origin.z)
 	

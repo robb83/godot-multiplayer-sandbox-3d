@@ -30,7 +30,7 @@ func _process(_delta: float) -> void:
 			menu_loading.hide()
 			loading_scene = null
 			return
-			
+		
 		var status = ResourceLoader.load_threaded_get_status(scene_path)
 		match status:
 			ResourceLoader.THREAD_LOAD_LOADED:

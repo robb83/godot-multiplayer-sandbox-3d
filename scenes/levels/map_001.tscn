@@ -79,7 +79,6 @@ metadata/_custom_type_script = "uid://dgjmbcyaafigc"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="DayNightCycle" unique_id=202963091]
 replication_config = SubResource("SceneReplicationConfig_l2c4s")
-public_visibility = false
 
 [node name="StaticObjects" type="Node3D" parent="." unique_id=1871595820]
 
