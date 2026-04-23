@@ -12,7 +12,6 @@ func _ready():
 	Network.peer_connected.connect(_peer_connected)
 	
 func _process(_delta: float) -> void:
-	
 	if loading_scene:
 		var scene_path = loading_scene
 		

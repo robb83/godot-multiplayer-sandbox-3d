@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bxisdy1amst25"]
 
 [ext_resource type="Script" uid="uid://b34l0opwv81pn" path="res://scenes/ui/menu_options.gd" id="1_2oiub"]
+[ext_resource type="StyleBox" uid="uid://yhwebrt6btx2" path="res://resources/ui_ingame_panel.tres" id="2_is25q"]
 
 [node name="Options" type="Control" unique_id=967372395]
 layout_mode = 3
@@ -19,17 +20,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=62779410]
-custom_minimum_size = Vector2(300, 200)
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=528226707]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_is25q")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1333802073]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=62779410]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1316418881]
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1316418881]
 layout_mode = 2
 text = "Network Sandbox 3D Game Project"
 
-[node name="ButtonDisconnect" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1846193314]
+[node name="ButtonDisconnect" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1846193314]
 layout_mode = 2
 text = "Disconnect
 "
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonDisconnect" to="." method="_on_button_disconnect_pressed"]
+[connection signal="pressed" from="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonDisconnect" to="." method="_on_button_disconnect_pressed"]

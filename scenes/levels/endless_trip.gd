@@ -57,7 +57,6 @@ func _handle_player_spawn(player_peer_id, player_position):
 
 func add_player(id: int):
 	G.trace("add_player %s", id)
-	G.set_synchronizers_visibility_for(day_night_cycle, id, true)
 	var dir := Vector2.from_angle(randf() * 2 * PI)
 	var pos := SPAWN_POINT + Vector3(dir.x, 0.0, dir.y) * SPAWN_RANDOM
 	player_spawner.spawn(id, pos)

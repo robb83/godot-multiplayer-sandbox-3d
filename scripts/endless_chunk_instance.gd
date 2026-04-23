@@ -6,10 +6,6 @@ var version : int = 1
 var generated : bool = false
 var manager : EndlessChunkManager = null
 
-func _enter_tree() -> void:
-	G.set_synchronizers_public_visibility(self, false)
-	G.set_synchronizers_visibility_for(self, get_multiplayer_authority(), true)
-
 func _ready():
 	pass
 	

@@ -46,14 +46,20 @@ func _ready():
 		object_container.child_exiting_tree.connect(_object_exiting)
 		object_container.child_entered_tree.connect(_object_entered)
 
+func _object_visiblity_filter(peer : int, object_id : int) -> bool:
+	if object_players.has(object_id):
+		return object_players[object_id].get(peer, false)
+	return false
+	
 func _object_entered(node : Node):
 	#G.trace("_object_entered = %s", node.name)
+	var object_id = int(node.name)
+	
 	var chunk_index = get_chunk_index(node.position.z)
 	if chunk_players.has(chunk_index):
 		for peer_id in chunk_players[chunk_index].keys():
 			if chunk_players[chunk_index][peer_id]:
-				G.set_synchronizers_visibility_for(node, peer_id, true)
-				object_players.get_or_add(int(node.name), {})[peer_id] = true
+				object_players.get_or_add(object_id, {})[peer_id] = true
 				if peer_id == local_peer_id:
 					node.visible = true
 
@@ -66,7 +72,6 @@ func _peer_disconnected(peer_id):
 	for key in chunk_players.keys():
 		if chunk_players[key].has(peer_id):
 			chunk_players[key].erase(peer_id)
-			G.set_synchronizers_visibility_for(spawned_chunks[key], peer_id, false)
 	
 func _spawn_object_function(data):
 	var id = data[0]
@@ -82,7 +87,9 @@ func _spawn_object_function(data):
 	object.rotation = rot
 	
 	object.visible = not multiplayer.is_server()
-	G.set_synchronizers_public_visibility(object, false)
+
+	G.set_synchronizers_add_visibility_filter(object, Callable(self, "_object_visiblity_filter").bind(id))
+	G.set_synchronizers_public_visibility(object, true)
 	
 	return object
 
@@ -123,14 +130,12 @@ func _update_objects(_delta):
 					else:
 						visible_players[peer_id] = true
 						still_visible[peer_id] = true
-						G.set_synchronizers_visibility_for(node, peer_id, true)
 						if peer_id == local_peer_id:
 							node.visible = true
 
 		for peer_id in visible_players.keys():
 			if not still_visible.has(peer_id):
 				visible_players.erase(peer_id)
-				G.set_synchronizers_visibility_for(node, peer_id, false)
 				if peer_id == local_peer_id:
 					node.visible = false
 					
@@ -185,6 +190,9 @@ func _spawn_chunk(index):
 	chunk.manager = self
 	spawned_chunks[index] = chunk
 	
+	G.set_synchronizers_add_visibility_filter(chunk, Callable(self, "_chunk_visibility_filter").bind(index))
+	G.set_synchronizers_public_visibility(chunk, true)
+	
 	chunk_container.add_child(chunk)
 	
 	if multiplayer.is_server():
@@ -219,29 +227,19 @@ func chunk_removed(chunk):
 	G.trace("chunk_removed: %s, %s", peer_id, chunk)
 	
 	_set_chunk_visiblity_for(peer_id, chunk, false)
-	
-	if spawned_chunks.has(chunk):
-		var instance = spawned_chunks[chunk]
-		G.set_synchronizers_visibility_for(instance, peer_id, false)
 		
-		#TODO: notify object visibility change if needed
+	#TODO: notify object visibility change if needed
 
 func has_player(chunk_index) -> bool:
 	return chunk_players.has(chunk_index) and chunk_players[chunk_index].size() > 0
 	
 func _set_chunk_visiblity_for(peer_id:int, chunk_index:int, value:bool):
-	if chunk_players.has(chunk_index):
-		if value:
-			chunk_players[chunk_index][peer_id] = value
-		else:
-			chunk_players[chunk_index].erase(peer_id)
+	if value:
+		var players = chunk_players.get_or_add(chunk_index, {})
+		players[peer_id] = value
 	else:
-		if value:
-			chunk_players[chunk_index] = {}
-			chunk_players[chunk_index][peer_id] = value
-			
-	if spawned_chunks.has(chunk_index):
-		G.set_synchronizers_visibility_for(spawned_chunks[chunk_index], peer_id, true)
+		if chunk_players.has(chunk_index):
+			chunk_players[chunk_index].erase(peer_id)
 
 func _unload_object_from_chunk(_index):
 	#G.trace("_unload_object_from_chunk: %s", index)
@@ -254,4 +252,7 @@ func _load_object_from_storage(index):
 		var id = str(i.id)
 		if not object_container.has_node(id):
 			multiplayer_spawner_objects.spawn([i.id, i.scene, i.pos, i.rot])
-	
+
+func _chunk_visibility_filter(peer : int, index : int) -> bool:
+	if peer == G.SERVER_PEER_ID: return true
+	return chunk_players.has(index) and chunk_players[index].get(peer, false)

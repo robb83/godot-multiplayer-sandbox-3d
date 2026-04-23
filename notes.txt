@@ -12,6 +12,7 @@ TODO: pickable_001 - continious falling if not receiving update from server
 TODO: fast object has large desync
 TODO: experimenting with RigidBody3D character
 TODO: how to climb a physical object without it flying away
+TODO: performance test set_visiblity_for vs add_visibility_filter (MultiplayerSynchronizer)
 
 Resources:
 	https://godotengine.org/article/multiplayer-changes-godot-4-0-report-4/
